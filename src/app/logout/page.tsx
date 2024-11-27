@@ -1,0 +1,28 @@
+'use client'
+
+// logout file
+
+import React, { useEffect } from 'react';
+import { useAuth } from '@/components/blocks/auth-context';
+
+const Logout = () => {
+    const { setIsLoggedIn } = useAuth();
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    };
+
+    useEffect(() => {
+        handleLogout();
+    }, []);
+
+    return (
+        <div>
+            <h1>Logging out...</h1>
+        </div>
+    );
+};
+
+export default Logout;
