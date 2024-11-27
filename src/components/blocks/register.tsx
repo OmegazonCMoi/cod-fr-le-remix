@@ -44,7 +44,7 @@ const Signup = () => {
             };
 
             // Submit data to the server
-            const response = await fetch('http://localhost:3002/api/users', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
