@@ -1,7 +1,7 @@
 'use client'
 
 import { subMenuItemsOne, subMenuItemsTwo } from '@/app/const/navbar';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { animate, inView, stagger } from 'motion';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {

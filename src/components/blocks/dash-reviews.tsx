@@ -11,8 +11,6 @@ interface Review {
 
 const DashReviews: React.FC = () => {
     const [reviews, setReviews] = useState<Review[]>([]);
-    const [newMessage, setNewMessage] = useState<string>('');
-    const [newNote, setNewNote] = useState<number>(5);
     const [error, setError] = useState<string>('');
 
     // Fetch reviews from the server
