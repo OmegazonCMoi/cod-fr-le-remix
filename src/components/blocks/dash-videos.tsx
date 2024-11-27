@@ -1,11 +1,9 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import DashEditVideos from './dash-videos-edit'; // Edit modal/form
 import DashVideosNew from './dash-videos-new'; // New video modal/form
 
-const AdminPanelVideos = () => {
+const AdminPanelVideos: React.FC = () => {
     const [videos, setVideos] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
     const [editingVideoIndex, setEditingVideoIndex] = useState<number | null>(null);
@@ -14,7 +12,7 @@ const AdminPanelVideos = () => {
 
     // Open the "Add New Video" modal
     const handleOpenModal = () => {
-        setIsModalOpen(true);
+        setIsModalOpen(true); // This will trigger the re-render
     };
 
     // Close the "Add New Video" modal
@@ -88,14 +86,7 @@ const AdminPanelVideos = () => {
         }
     };
 
-    useEffect(() => {
-        if (newVideoData) {
-            console.log('Creating new video:', newVideoData); // Debug log
-            handleCreateVideo(newVideoData);
-            setNewVideoData(null);
-        }
-    }, [newVideoData]);
-
+    // Fetch all videos on component mount
     useEffect(() => {
         const fetchVideos = async () => {
             try {
@@ -110,6 +101,15 @@ const AdminPanelVideos = () => {
 
         fetchVideos();
     }, []);
+
+    // Trigger video creation after modal submission
+    useEffect(() => {
+        if (newVideoData) {
+            console.log('Creating new video:', newVideoData); // Debug log
+            handleCreateVideo(newVideoData);
+            setNewVideoData(null);
+        }
+    }, [newVideoData]);
 
     return (
         <div className="p-6 mt-20">
@@ -155,7 +155,6 @@ const AdminPanelVideos = () => {
                                 <td className="py-4 px-6 text-sm text-gray-800 space-x-2">
                                     <Button
                                         onClick={() => {
-                                            console.log('Editing video:', video); // Debug log
                                             setEditingVideoIndex(index);
                                         }}
                                         className="bg-neutral-700 text-white hover:bg-yellow-600"

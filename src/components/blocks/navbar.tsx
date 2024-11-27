@@ -129,7 +129,7 @@ const Navbar = () => {
                                         variant: 'ghost',
                                     }),
                                 )}
-                                href="#"
+                                href="videos"
                             >
                                 Videos
                             </a>

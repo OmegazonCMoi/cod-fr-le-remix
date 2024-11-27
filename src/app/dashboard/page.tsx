@@ -6,6 +6,8 @@ import AdminPanelUser from '@/components/blocks/dash-user';
 import AdminPanelDashboard from '@/components/blocks/dash-main';
 import AdminPanelGames from '@/components/blocks/dash-games';
 import AdminPanelVideos from '@/components/blocks/dash-videos';
+import AdminPanelFiles from '@/components/blocks/dash-files';
+import AdminPanelReviews from '@/components/blocks/dash-reviews';
 
 const AdminPanel = () => {
     const [selectedComponent, setSelectedComponent] = useState<string>('Dashboard');
@@ -29,6 +31,10 @@ const AdminPanel = () => {
                 return <AdminPanelGames />;
             case 'Videos':
                 return <AdminPanelVideos />;
+            case 'Files':
+                return <AdminPanelFiles />;
+            case 'Reviews':
+                return <AdminPanelReviews />;
             case 'Disconnect':
                 logout();
                 return null;
@@ -85,7 +91,7 @@ const AdminPanel = () => {
                                 <span className="flex-1 ms-3 whitespace-nowrap">Videos</span>
                             </a>
                         </li>
-                        <li>
+                        <li onClick={() => setSelectedComponent('Reviews')}>
                             <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                     <path fillRule="evenodd" d="M6.912 3a3 3 0 0 0-2.868 2.118l-2.411 7.838a3 3 0 0 0-.133.882V18a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0 0 17.088 3H6.912Zm13.823 9.75-2.213-7.191A1.5 1.5 0 0 0 17.088 4.5H6.912a1.5 1.5 0 0 0-1.434 1.059L3.265 12.75H6.11a3 3 0 0 1 2.684 1.658l.256.513a1.5 1.5 0 0 0 1.342.829h3.218a1.5 1.5 0 0 0 1.342-.83l.256-.512a3 3 0 0 1 2.684-1.658h2.844Z" clipRule="evenodd" />

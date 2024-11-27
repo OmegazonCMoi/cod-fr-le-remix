@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -10,25 +10,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-interface Video {
+interface Game {
     id: number;
     title: string;
     description: string;
-    url: string;
+    img: string;
+    steam_link: string;
+    download_link: string;
+    client_link: string;
 }
 
-interface DashEditVideosProps {
-    video: Video;
-    onSave: (formData: Video) => void;
+interface DashEditGamesProps {
+    game: Game;
+    onSave: (formData: Game) => void;
     onClose: () => void; // Close the modal when save/cancel
 }
 
-const DashEditVideos: React.FC<DashEditVideosProps> = ({ video, onSave, onClose }) => {
+const DashEditGames: React.FC<DashEditGamesProps> = ({ game, onSave, onClose }) => {
+
     const [formData, setFormData] = useState({
-        id: video.id,
-        title: video.title || "",
-        description: video.description || "",
-        url: video.url || "",
+        id: game.id,
+        title: game.title || "",
+        description: game.description || "",
+        img: game.img || "",
+        steam_link: game.steam_link || "",
+        download_link: game.download_link || "",
+        client_link: game.client_link || "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -44,7 +51,7 @@ const DashEditVideos: React.FC<DashEditVideosProps> = ({ video, onSave, onClose 
         <Dialog open>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Video Details</DialogTitle>
+                    <DialogTitle>Edit Game Details</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div>
@@ -54,7 +61,7 @@ const DashEditVideos: React.FC<DashEditVideosProps> = ({ video, onSave, onClose 
                             name="title"
                             value={formData.title}
                             onChange={handleChange}
-                            placeholder="Enter video title"
+                            placeholder="Enter game title"
                         />
                     </div>
                     <div>
@@ -63,18 +70,48 @@ const DashEditVideos: React.FC<DashEditVideosProps> = ({ video, onSave, onClose 
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Enter video description"
+                            placeholder="Enter game description"
                             rows={4}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Video URL</label>
+                        <label className="block text-sm font-medium">Image URL</label>
                         <Input
                             type="url"
-                            name="url"
-                            value={formData.url}
+                            name="img"
+                            value={formData.img}
                             onChange={handleChange}
-                            placeholder="Enter video URL"
+                            placeholder="Enter image URL"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium">Steam URL</label>
+                        <Input
+                            type="url"
+                            name="steam"
+                            value={formData.steam_link}
+                            onChange={handleChange}
+                            placeholder="Enter Steam URL"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium">Download URL</label>
+                        <Input
+                            type="url"
+                            name="download"
+                            value={formData.download_link}
+                            onChange={handleChange}
+                            placeholder="Enter Download URL"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium">Client URL</label>
+                        <Input
+                            type="url"
+                            name="client"
+                            value={formData.client_link}
+                            onChange={handleChange}
+                            placeholder="Enter Client URL"
                         />
                     </div>
                 </div>
@@ -91,4 +128,4 @@ const DashEditVideos: React.FC<DashEditVideosProps> = ({ video, onSave, onClose 
     );
 };
 
-export default DashEditVideos;
+export default DashEditGames;

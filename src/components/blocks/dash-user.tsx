@@ -47,8 +47,24 @@ const AdminPanelUser = () => {
     return (
         <div className="p-6 mt-20">
             <div className="flex items-center gap-4">
-                <h2 className="text-3xl font-semibold text-gray-900">User Management</h2>
-                <Button className="px-8">+</Button>
+                <h2 className="text-3xl font-semibold text-gray-900">Users Management</h2>
+                <Button className="px-8">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-plus"
+                    >
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                    </svg>
+                </Button>
             </div>
 
             <p className="text-lg text-gray-600 mt-2">Manage and edit user roles.</p>
