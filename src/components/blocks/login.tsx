@@ -52,7 +52,7 @@ const Login = () => {
             } else {
                 setError(data.message || 'Invalid credentials');
             }
-        } catch (err) {
+        } catch {
             setError('An error occurred. Please try again.');
         }
     };
@@ -114,7 +114,7 @@ const Login = () => {
                     </div>
                 </div>
                 <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
-                    <p>Don't have an account?</p>
+                    <p>Don&apos;t have an account?</p>
                     <a href="/register" className="font-medium text-primary">
                         Sign up
                     </a>

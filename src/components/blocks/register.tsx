@@ -61,7 +61,7 @@ const Signup = () => {
             } else {
                 setError(data.message || 'Something went wrong. Please try again.');
             }
-        } catch (err) {
+        } catch {
             setError('An error occurred. Please try again.');
         }
     };

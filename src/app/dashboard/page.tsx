@@ -12,10 +12,6 @@ import AdminPanelReviews from '@/components/blocks/dash-reviews';
 const AdminPanel = () => {
     const [selectedComponent, setSelectedComponent] = useState<string>('Dashboard');
 
-    const handleSidebarItemClick = (component: string) => {
-        setSelectedComponent(component);
-    };
-
     const logout = () => {
         localStorage.removeItem('token');
         window.location.href = '/';

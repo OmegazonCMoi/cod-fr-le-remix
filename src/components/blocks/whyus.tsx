@@ -58,7 +58,7 @@ const Feature = () => {
                         </span>
                         <h3 className="mb-2 text-xl font-medium">Fast</h3>
                         <p className="leading-7 text-muted-foreground">
-                            We understand that time is valuable. That's why we constantly search for new cheats and hacks to make sure our users have the fastest and most efficient experience possible.
+                            We understand that time is valuable. That&apos;s why we constantly search for new cheats and hacks to make sure our users have the fastest and most efficient experience possible.
                         </p>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import Navbar from '@/components/blocks/navbar';
-import React, { useState } from 'react';
+import React from 'react';
 
 const Videos = () => {
     return (

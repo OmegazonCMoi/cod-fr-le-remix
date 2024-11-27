@@ -12,7 +12,7 @@ const DashFiles: React.FC = () => {
             if (!response.ok) throw new Error('Failed to fetch files');
             const data = await response.json();
             setFiles(data);
-        } catch (err) {
+        } catch {
             setError('Failed to load files');
         }
     };
@@ -33,7 +33,7 @@ const DashFiles: React.FC = () => {
             const data = await response.json();
             console.log('File uploaded:', data.filename);
             fetchFiles();
-        } catch (err) {
+        } catch {
             setError('Failed to upload file');
         } finally {
             setIsUploading(false);
@@ -47,7 +47,7 @@ const DashFiles: React.FC = () => {
             });
             if (!response.ok) throw new Error('Failed to delete file');
             fetchFiles();
-        } catch (err) {
+        } catch {
             setError('Failed to delete file');
         }
     };

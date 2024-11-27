@@ -22,30 +22,8 @@ const DashReviews: React.FC = () => {
             if (!response.ok) throw new Error('Failed to fetch reviews');
             const data = await response.json();
             setReviews(data);
-        } catch (err) {
+        } catch {
             setError('Failed to load reviews');
-        }
-    };
-
-    // Add a new review
-    const handleAddReview = async () => {
-        if (!newMessage || newNote < 0 || newNote > 5) {
-            setError('Please provide a valid message and a note between 0 and 5');
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:3002/api/reviews', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: newMessage, note: newNote }),
-            });
-            if (!response.ok) throw new Error('Failed to add review');
-            fetchReviews(); // Refresh the reviews list
-            setNewMessage('');
-            setNewNote(5);
-        } catch (err) {
-            setError('Failed to add review');
         }
     };
 
@@ -57,7 +35,7 @@ const DashReviews: React.FC = () => {
             });
             if (!response.ok) throw new Error('Failed to delete review');
             fetchReviews(); // Refresh the reviews list
-        } catch (err) {
+        } catch {
             setError('Failed to delete review');
         }
     };

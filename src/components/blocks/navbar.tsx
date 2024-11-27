@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { useAuth } from './auth-context';
+import Link from 'next/link';
 
 const Navbar = () => {
     const sectionRef = useRef(null);
@@ -49,7 +50,7 @@ const Navbar = () => {
                             <span className="navbar-logo text-xl font-bold opacity-0">Hack on COD</span>
                         </div>
                         <div className="flex items-center space-x-4 navbar-menu opacity-0">
-                            <a
+                            <Link
                                 className={cn(
                                     'text-muted-foreground',
                                     navigationMenuTriggerStyle,
@@ -60,7 +61,7 @@ const Navbar = () => {
                                 href="/"
                             >
                                 Home
-                            </a>
+                            </Link>
                             <NavigationMenu>
                                 <NavigationMenuList>
                                     <NavigationMenuItem className="text-muted-foreground navbar-item opacity-0">
@@ -121,7 +122,7 @@ const Navbar = () => {
                                     </NavigationMenuItem>
                                 </NavigationMenuList>
                             </NavigationMenu>
-                            <a
+                            <Link
                                 className={cn(
                                     'text-muted-foreground',
                                     navigationMenuTriggerStyle,
@@ -132,8 +133,8 @@ const Navbar = () => {
                                 href="videos"
                             >
                                 Videos
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 className={cn(
                                     'text-muted-foreground',
                                     navigationMenuTriggerStyle,
@@ -144,7 +145,7 @@ const Navbar = () => {
                                 href="#"
                             >
                                 Reviews
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="navbar-socials flex items-center space-x-6 text-muted-foreground opacity-0">

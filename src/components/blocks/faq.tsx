@@ -7,7 +7,6 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion';
 import { faqs } from '@/app/const/faq';
-import { useInView } from 'react-intersection-observer';
 import { animate, inView, stagger } from 'motion';
 import { useEffect, useRef } from 'react';
 
@@ -15,15 +14,12 @@ const Faq = () => {
     const sectionRef = useRef(null);
 
     useEffect(() => {
-        // Trigger animation when the entire section is in view
         if (sectionRef.current) {
             inView(sectionRef.current, () => {
-                // Animate the title
                 animate('.faq-title', { opacity: [0, 1], y: [-50, 0] }, { duration: 0.6 });
 
-                // Animate each accordion item with stagger
                 animate('.accordion-item', { opacity: [0, 1], y: [-50, 0] }, { duration: 0.6, delay: stagger(0.2) });
-            }, { amount: 1.0 }); // Ensure the entire section is visible before triggering
+            }, { amount: 1.0 });
         }
     }, []);
 

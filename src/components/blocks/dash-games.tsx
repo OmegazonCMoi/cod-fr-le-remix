@@ -37,7 +37,7 @@ const AdminPanelGames = () => {
 
             const data = await response.json();
             setGames((prevGames) => [...prevGames, data]); // Add the new game to the list
-        } catch (err) {
+        } catch {
             setError('Failed to create game');
         }
     };
@@ -51,7 +51,7 @@ const AdminPanelGames = () => {
             if (!response.ok) throw new Error('Failed to delete game');
 
             setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
-        } catch (err) {
+        } catch {
             setError('Failed to delete game');
         }
     };
@@ -71,7 +71,7 @@ const AdminPanelGames = () => {
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const data = await response.json();
                 setGames(data);
-            } catch (err) {
+            } catch {
                 setError('Failed to load games');
             }
         };

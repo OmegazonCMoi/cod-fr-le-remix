@@ -17,7 +17,7 @@ const AdminPanelUser = () => {
                 const data = await response.json();
                 setUsers(data);
                 setLoading(false);
-            } catch (err) {
+            } catch {
                 setError('Failed to load users');
                 setLoading(false);
             }
@@ -36,7 +36,7 @@ const AdminPanelUser = () => {
 
             // Remove the deleted user from the state
             setUsers(users.filter(user => user.id !== id));
-        } catch (err) {
+        } catch {
             setError('Failed to delete user');
         }
     };

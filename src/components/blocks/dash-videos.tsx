@@ -41,7 +41,7 @@ const AdminPanelVideos: React.FC = () => {
 
             const data = await response.json();
             setVideos((prevVideos) => [...prevVideos, data]);
-        } catch (err) {
+        } catch {
             setError('Failed to create video');
         }
     };
@@ -56,7 +56,7 @@ const AdminPanelVideos: React.FC = () => {
             if (!response.ok) throw new Error('Failed to delete video');
 
             setVideos((prevVideos) => prevVideos.filter((video) => video.id !== videoId));
-        } catch (err) {
+        } catch {
             setError('Failed to delete video');
         }
     };
@@ -81,7 +81,7 @@ const AdminPanelVideos: React.FC = () => {
             );
 
             setEditingVideoIndex(null); // Close the edit form/modal
-        } catch (err) {
+        } catch {
             setError('Failed to update video');
         }
     };
@@ -94,7 +94,7 @@ const AdminPanelVideos: React.FC = () => {
                 if (!response.ok) throw new Error('Failed to fetch videos');
                 const data = await response.json();
                 setVideos(data);
-            } catch (err) {
+            } catch {
                 setError('Failed to load videos');
             }
         };

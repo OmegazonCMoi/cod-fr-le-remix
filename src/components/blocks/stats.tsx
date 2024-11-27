@@ -59,12 +59,12 @@ const Stat = () => {
         <section ref={sectionRef} className="py-32 justify-center mx-auto flex">
             <div className="container">
                 <h1 className="stat-title text-center text-4xl font-semibold lg:text-6xl opacity-0">
-                    Let's talk about the stats
+                    Let&apos;s talk about the stats
                 </h1>
                 <div className="grid gap-10 pt-9 md:grid-cols-3 lg:gap-0 lg:pt-20">
                     <div className="stat-block text-center opacity-0">
                         <p className="text-sm font-medium text-muted-foreground">
-                            Reduce your time to hire by
+                            Reduce your time to find cheats by
                         </p>
                         <p className="pt-4 text-7xl font-semibold lg:pt-10"><span id="stat-4x">0</span>x</p>
                         <p className="text-2xl font-semibold text-muted-foreground">
