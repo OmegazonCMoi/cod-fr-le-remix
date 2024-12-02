@@ -19,7 +19,7 @@ import Link from 'next/link';
 const Navbar = () => {
     const sectionRef = useRef(null);
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
 
     useEffect(() => {
         if (sectionRef.current) {
@@ -32,8 +32,10 @@ const Navbar = () => {
         }
     }, []);
 
+    const isAdmin = user?.roles?.includes('Administrateur');
+
     return (
-        <section ref={sectionRef} className="py-4 w-full fixed bg-white z-50">
+        <section ref={sectionRef} className="py-4 w-full fixed bg-white z-20">
             <div className="w-full max-w-screen-2xl mx-auto flex justify-between items-center px-4 lg:px-8">
                 <nav className="hidden lg:flex w-full justify-between items-center">
                     <div className="flex items-center gap-6">
@@ -53,6 +55,7 @@ const Navbar = () => {
                             <Link
                                 className={cn(
                                     'text-muted-foreground',
+                                    'z-50',
                                     navigationMenuTriggerStyle,
                                     buttonVariants({
                                         variant: 'ghost',
@@ -76,7 +79,7 @@ const Navbar = () => {
                                                             className={cn(
                                                                 'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
                                                             )}
-                                                            href="#"
+                                                            href="/"
                                                         >
                                                             {item.icon}
                                                             <div>
@@ -148,24 +151,16 @@ const Navbar = () => {
                             </Link>
                         </div>
                     </div>
-                    <div className="navbar-socials flex items-center space-x-6 text-muted-foreground opacity-0">
+                    <div className="navbar-socials flex items-center space-x-6 opacity-0">
                         {!isLoggedIn ? (
                             <>
-                                <a href="login">
-                                    <Button variant={'outline'}>Login</Button>
-                                </a>
-                                <a href="register">
-                                    <Button>Register</Button>
-                                </a>
+                                <Link href="login"><Button variant="outline">Login</Button></Link>
+                                <Link href="register"><Button>Register</Button></Link>
                             </>
                         ) : (
                             <>
-                                <a href="logout">
-                                    <Button variant={'outline'}>Logout</Button>
-                                </a>
-                                <a href="dashboard">
-                                    <Button className='mr-10'>Dashboard</Button>
-                                </a>
+                                <Link href="logout"><Button variant="outline">Logout</Button></Link>
+                                {isAdmin ? <Link href="dashboard"><Button>Dashboard</Button></Link> : <Link href="account"><Button>Account</Button></Link>}
                             </>
                         )}
                     </div>
