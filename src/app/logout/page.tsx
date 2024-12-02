@@ -10,7 +10,7 @@ const Logout = () => {
 
     const handleLogout = () => {
         setIsLoggedIn(false);
-        localStorage.removeItem('token');
+        localStorage.clear();
         window.location.href = '/';
     };
 

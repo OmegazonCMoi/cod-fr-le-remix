@@ -64,6 +64,7 @@ const DashFiles: React.FC = () => {
     return (
         <div className="p-6 mt-20">
             <h2 className="text-3xl font-semibold text-gray-900">Manage Files in Assets</h2>
+            <p className='text-red-500'>Not available. Work in progess...</p>
 
             {error && <p className="text-red-500 mt-4">{error}</p>}
 

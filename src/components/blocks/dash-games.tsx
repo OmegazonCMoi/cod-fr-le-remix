@@ -67,7 +67,7 @@ const AdminPanelGames = () => {
     useEffect(() => {
         const fetchGames = async () => {
             try {
-                const response = await fetch('http://localhost:3002/api/games');
+                const response = await fetch('http://localhost:3002/api/games/');
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const data = await response.json();
                 setGames(data);

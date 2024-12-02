@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { integrations } from '@/app/const/hero';
 
@@ -36,7 +37,7 @@ const Hero = () => {
             </div>
 
             {/* Content */}
-            <div className="relative w-full px-6 md:px-12 lg:px-20">
+            <div className="relative w-full px-6 md:px-12 lg:px-20 z-10">
                 <div className="absolute left-0 z-10 hidden h-full w-1/2 bg-[linear-gradient(to_right,hsl(var(--background))_85%,transparent_100%)] md:block"></div>
                 <div className="container mx-auto flex flex-col items-start gap-12 md:flex-row md:items-center">
                     {/* Left Section */}
