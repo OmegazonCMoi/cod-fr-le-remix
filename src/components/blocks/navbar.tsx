@@ -13,10 +13,11 @@ import {
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { useAuth } from './auth-context';
+import { useAuth } from '../../hooks/auth-context';
 import Link from 'next/link';
 
 const Navbar = () => {
+
     const sectionRef = useRef(null);
 
     const { isLoggedIn, user, setIsLoggedIn, setUser } = useAuth();
@@ -33,7 +34,7 @@ const Navbar = () => {
                         // Set the user state and login state
                         setUser(parsedUser);
                         setIsLoggedIn(true);
-                    } catch (error) {
+                    } catch {
                         setIsLoggedIn(false);
                         setUser(null);
                     }
@@ -99,7 +100,7 @@ const Navbar = () => {
                                             <ul className="w-80 p-3">
                                                 {subMenuItemsOne.map((item, idx) => (
                                                     <li key={idx}>
-                                                        <a
+                                                        <Link
                                                             className={cn(
                                                                 'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
                                                             )}
@@ -114,7 +115,7 @@ const Navbar = () => {
                                                                     {item.description}
                                                                 </p>
                                                             </div>
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                 ))}
                                             </ul>

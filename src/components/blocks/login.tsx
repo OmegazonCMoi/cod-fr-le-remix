@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from './auth-context';
+import { useAuth } from '../../hooks/auth-context';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });

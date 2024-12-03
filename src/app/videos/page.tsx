@@ -46,7 +46,7 @@ const Videos = () => {
             <Navbar />
             <div className="flex-grow grid place-items-center">
                 <h1 className="my-4 text-pretty text-3xl font-bold sm:text-4xl lg:text-6xl mt-32">
-                    All videos we've posted
+                    All videos we&apos;ve posted
                 </h1>
 
                 {error && <p className="text-red-500 text-xl">{error}</p>}

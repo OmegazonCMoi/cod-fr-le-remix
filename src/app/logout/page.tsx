@@ -3,7 +3,7 @@
 // logout file
 
 import React, { useEffect } from 'react';
-import { useAuth } from '@/components/blocks/auth-context';
+import { useAuth } from '@/hooks/auth-context';
 
 const Logout = () => {
     const { setIsLoggedIn } = useAuth();

@@ -5,7 +5,6 @@ export const withAdminProtection = <T extends object>(WrappedComponent: React.Co
     const ProtectedComponent = (props: T) => {
         const router = useRouter();
         const [loading, setLoading] = useState(true);
-        const [userRole, setUserRole] = useState<string | null>(null);
 
         useEffect(() => {
             // Get userId from localStorage
@@ -22,7 +21,6 @@ export const withAdminProtection = <T extends object>(WrappedComponent: React.Co
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.roles === 'Administrateur') {
-                            setUserRole('Administrateur');
                             setLoading(false);
                         } else {
                             router.push('/403'); // Redirect to a 403 page if not admin

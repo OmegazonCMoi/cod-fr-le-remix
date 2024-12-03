@@ -21,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "cursor-effects": "^1.0.16",
     "embla-carousel-react": "^8.5.1",
     "i18next": "^24.0.2",
