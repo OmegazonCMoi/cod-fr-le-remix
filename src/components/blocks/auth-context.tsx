@@ -24,53 +24,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const token = localStorage.getItem('token');
+            const isConnected = localStorage.getItem('isConnected'); // Check if user is connected
 
-            if (token) {
-                // Safely retrieve user data from localStorage
-                const storedUser = localStorage.getItem('user');
+            if (isConnected) {
+                const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
-                if (storedUser && storedUser !== "undefined") {
-                    try {
-                        const parsedUser = JSON.parse(storedUser);
-
-                        // Check if the parsed user object contains valid data
-                        if (parsedUser && parsedUser.id && parsedUser.name) {
-                            setUser(parsedUser);
-                            setIsLoggedIn(true);
-                        } else {
-                            setIsLoggedIn(false);
-                            setUser(null);
-                        }
-                    } catch (error) {
-                        setIsLoggedIn(false);
-                        setUser(null);
-                    }
+                if (userId && userId !== 'undefined') {
+                    // Fetch user details from API
+                    fetchUserDetails(userId);
                 } else {
-                    // If no valid user data in localStorage, fetch from the API
-                    fetch('http://localhost:3002/api/users', {
-                        headers: { Authorization: `Bearer ${token}` },
-                    })
-                        .then((res) => {
-                            if (!res.ok) {
-                                throw new Error(`Failed to fetch user, status: ${res.status}`);
-                            }
-                            return res.json();
-                        })
-                        .then((data) => {
-                            if (Array.isArray(data) && data.length > 0) {
-                                const userData = data[0]; // Get the first user from the array
-                                setUser(userData);
-                                setIsLoggedIn(true);
-                            } else {
-                                setIsLoggedIn(false);
-                                setUser(null);
-                            }
-                        })
-                        .catch((error) => {
-                            setIsLoggedIn(false);
-                            setUser(null);
-                        });
+                    setIsLoggedIn(false);
+                    setUser(null);
                 }
             } else {
                 setIsLoggedIn(false);
@@ -78,6 +42,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         }
     }, []);
+
+    const fetchUserDetails = async (userId: string) => {
+        try {
+            const response = await fetch(`http://localhost:3002/api/users/${userId}`);
+            if (response.ok) {
+                const userData: User = await response.json();
+                setUser(userData);
+                setIsLoggedIn(true);
+            } else {
+                console.error('Failed to fetch user details');
+                setIsLoggedIn(false);
+                setUser(null);
+            }
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+            setIsLoggedIn(false);
+            setUser(null);
+        }
+    };
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, user, setIsLoggedIn, setUser }}>
@@ -93,4 +76,3 @@ export const useAuth = (): AuthContextProps => {
     }
     return context;
 };
-

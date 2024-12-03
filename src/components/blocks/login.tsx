@@ -50,6 +50,7 @@ const Login = () => {
                 setSuccess('Login successful!');
                 setIsLoggedIn(true);
                 localStorage.setItem('userId', data.user.id);
+                localStorage.setItem('isConnected', 'true');
 
                 // Save user info
                 setUser(data.user);
