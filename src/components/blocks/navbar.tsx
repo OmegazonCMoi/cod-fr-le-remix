@@ -19,7 +19,33 @@ import Link from 'next/link';
 const Navbar = () => {
     const sectionRef = useRef(null);
 
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn, user, setIsLoggedIn, setUser } = useAuth();
+
+    useEffect(() => {
+        // Check if there's any authentication data in localStorage when the component mounts
+        if (typeof window !== 'undefined') {
+            const isConnected = localStorage.getItem('isConnected') === 'true'; // Check if user is logged in
+            if (isConnected) {
+                const storedUser = localStorage.getItem('user');
+                if (storedUser && storedUser !== 'undefined') {
+                    try {
+                        const parsedUser = JSON.parse(storedUser);
+                        // Set the user state and login state
+                        setUser(parsedUser);
+                        setIsLoggedIn(true);
+                    } catch (error) {
+                        setIsLoggedIn(false);
+                        setUser(null);
+                    }
+                }
+            } else {
+                setIsLoggedIn(false);
+                setUser(null);
+            }
+        }
+    }, [setIsLoggedIn, setUser]);
+
+    const isAdmin = user?.roles?.includes('Administrateur');
 
     useEffect(() => {
         if (sectionRef.current) {
@@ -31,8 +57,6 @@ const Navbar = () => {
             }, { amount: 0.8 });
         }
     }, []);
-
-    const isAdmin = user?.roles?.includes('Administrateur');
 
     return (
         <section ref={sectionRef} className="py-4 w-full fixed bg-white z-20">
