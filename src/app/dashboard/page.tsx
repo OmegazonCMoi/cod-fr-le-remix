@@ -9,6 +9,7 @@ import AdminPanelVideos from '@/components/blocks/dash-videos';
 import AdminPanelFiles from '@/components/blocks/dash-files';
 import AdminPanelReviews from '@/components/blocks/dash-reviews';
 import { withAdminProtection } from '@/hooks/useAdminGuard';
+import AccountPage from '@/components/blocks/account';
 
 
 const AdminPanel = () => {
@@ -34,7 +35,7 @@ const AdminPanel = () => {
             case 'Reviews':
                 return <AdminPanelReviews />;
             case 'Account':
-                return <div>Account Component</div>;
+                return <AccountPage />;
             case 'Disconnect':
                 logout();
                 return null;

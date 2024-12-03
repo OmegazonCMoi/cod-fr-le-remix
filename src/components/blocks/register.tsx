@@ -5,12 +5,15 @@ import bcrypt from 'bcryptjs';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
+    const router = useRouter();
     // Separate state for form data and plain password
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        roles: 'Utilisateur',
     });
     const [plainPassword, setPlainPassword] = useState('');
     const [error, setError] = useState('');
@@ -44,7 +47,7 @@ const Signup = () => {
             };
 
             // Submit data to the server
-            const response = await fetch('https://express-cod-fr.vercel.app/api/users', {
+            const response = await fetch('http://localhost:3002/api/users/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,8 +59,8 @@ const Signup = () => {
 
             if (response.ok) {
                 setSuccess('Account created successfully!');
-                setFormData({ name: '', email: '' });
-                setPlainPassword(''); // Reset password field
+                setFormData({ name: '', email: '', roles: 'Utilisateur' });
+                router.push('/login'); // Redirect to login page
             } else {
                 setError(data.message || 'Something went wrong. Please try again.');
             }
