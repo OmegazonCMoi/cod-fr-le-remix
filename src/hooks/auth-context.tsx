@@ -1,19 +1,24 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 interface User {
     id: string;
     name: string;
     email: string;
     roles: string[];
+    token: string; // Include token as part of the user data
 }
 
 interface AuthContextProps {
-    isLoggedIn: boolean;
     user: User | null;
-    setIsLoggedIn: (value: boolean) => void;
     setUser: (user: User | null) => void;
+    isLoggedIn: boolean;
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+    token: string | null;
+    setToken: (token: string | null) => void;
+    login: (user: User) => void;
+    logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -21,49 +26,71 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
+    const [token, setToken] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const isConnected = localStorage.getItem('isConnected'); // Check if user is connected
+    const synchronizeUserState = useCallback(() => {
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+            setUser(null);
+            setIsLoggedIn(false);
+            setToken(null);
+            return;
+        }
 
-            if (isConnected) {
-                const userId = localStorage.getItem('userId'); // Get userId from localStorage
+        try {
+            const parsedUser = JSON.parse(storedUser) as User;
 
-                if (userId && userId !== 'undefined') {
-                    // Fetch user details from API
-                    fetchUserDetails(userId);
-                } else {
-                    setIsLoggedIn(false);
-                    setUser(null);
-                }
+            // Validate parsed user and its token
+            if (parsedUser && parsedUser.token) {
+                setUser(parsedUser);
+                setIsLoggedIn(true);
+                setToken(parsedUser.token);
             } else {
-                setIsLoggedIn(false);
                 setUser(null);
+                setIsLoggedIn(false);
+                setToken(null);
+                localStorage.removeItem('user'); // Remove invalid user data
             }
+        } catch (error) {
+            console.error('Error parsing user from localStorage:', error);
+            setUser(null);
+            setIsLoggedIn(false);
+            setToken(null);
+            localStorage.removeItem('user'); // Remove corrupt data
         }
     }, []);
 
-    const fetchUserDetails = async (userId: string) => {
-        try {
-            const response = await fetch(`http://localhost:3002/api/users/${userId}`);
-            if (response.ok) {
-                const userData: User = await response.json();
-                setUser(userData);
-                setIsLoggedIn(true);
-            } else {
-                console.error('Failed to fetch user details');
-                setIsLoggedIn(false);
-                setUser(null);
-            }
-        } catch (error) {
-            console.error('Error fetching user details:', error);
-            setIsLoggedIn(false);
-            setUser(null);
-        }
+    useEffect(() => {
+        synchronizeUserState();
+    }, [synchronizeUserState]);
+
+    const login = (newUser: User) => {
+        setUser(newUser);
+        setIsLoggedIn(true);
+        setToken(newUser.token);
+        localStorage.setItem('user', JSON.stringify(newUser));
+    };
+
+    const logout = () => {
+        setUser(null);
+        setIsLoggedIn(false);
+        setToken(null);
+        localStorage.removeItem('user');
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, user, setIsLoggedIn, setUser }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                setUser,
+                isLoggedIn,
+                setIsLoggedIn,
+                token,
+                setToken,
+                login,
+                logout,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

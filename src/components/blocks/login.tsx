@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '../../hooks/auth-context';
+import { useAuth } from '@/hooks/auth-context';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -43,29 +43,41 @@ const Login = () => {
                 body: JSON.stringify(formData),
             });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
-            console.log(data);
+            console.log(data);  // Log the data to check the response structure
 
             if (response.ok) {
                 setSuccess('Login successful!');
                 setIsLoggedIn(true);
-                localStorage.setItem('userId', data.user.id);
-                localStorage.setItem('isConnected', 'true');
 
-                // Save user info
-                setUser(data.user);
+                // Check if the token is available in the response (within `data.user.token`)
+                if (data.user && data.user.token) {
+                    // Store the token in localStorage
+                    localStorage.setItem('user', JSON.stringify(data.user));
 
-                // Redirect to dashboard
-                router.push('/');
+                    // Store the user info (optional but useful for session management)
+                    setUser(data.user); // Assuming data.user contains the user details
+
+                    // Redirect to dashboard
+                    router.push('/');
+                } else {
+                    setError('Login succeeded, but no token was returned.');
+                }
             } else {
                 setError(data.message || 'Invalid credentials.');
             }
-        } catch {
+        } catch (err) {
+            console.error('Error:', err); // Log any unexpected errors
             setError('An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <section className="py-32 justify-center mx-auto flex">

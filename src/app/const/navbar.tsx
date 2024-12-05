@@ -3,21 +3,25 @@ import { Atom, Plus, Swords, Tally1, Tally2, Tally3 } from 'lucide-react';
 
 export const subMenuItemsOne = [
     {
+        link: '/cheats#blackops3',
         title: 'Black Ops 3',
         description: 'The best Black Ops 3 experience you can get online.',
         icon: <Tally3 className="size-5 shrink-0" />,
     },
     {
+        link: '/cheats#blackops2',
         title: 'Black Ops 2',
         description: 'Black Ops 2 is back and better than ever before.',
         icon: <Tally2 className="size-5 shrink-0" />,
     },
     {
+        link: '/cheats#blackops1',
         title: 'Black Ops 1',
         description: 'The original Black Ops experience is back here.',
         icon: <Tally1 className="size-5 shrink-0" />,
     },
     {
+        link: '/cheats#othergames',
         title: 'Other Games',
         description:
             'We have a wide range of games available for you to play online.',

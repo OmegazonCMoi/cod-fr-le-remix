@@ -12,11 +12,11 @@ interface DashVideosNewProps {
 const DashVideosNew: React.FC<DashVideosNewProps> = ({ onSave, onClose }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [url, setUrl] = useState('');
+    const [link, setLink] = useState('');
 
     const handleSave = () => {
-        if (title && description && url) {
-            const newVideo = { title, description, url };
+        if (title && description && link) {
+            const newVideo = { title, description, link };
             onSave(newVideo); // Call the passed-in onSave function to save the new video
         } else {
             alert('Please fill all the fields.');
@@ -64,8 +64,8 @@ const DashVideosNew: React.FC<DashVideosNewProps> = ({ onSave, onClose }) => {
                             <Input
                                 id="url"
                                 type="text"
-                                value={url}
-                                onChange={(e) => setUrl(e.target.value)}
+                                value={link}
+                                onChange={(e) => setLink(e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-neutral-800 focus:ring focus:ring-indigo-200"
                                 placeholder="Enter video URL"
                             />
