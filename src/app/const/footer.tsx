@@ -2,19 +2,19 @@ export const sections = [
     {
         title: 'Hack on COD',
         links: [
-            { name: 'Cheats', href: '#' },
-            { name: 'Games', href: '#' },
-            { name: 'Videos', href: '#' },
-            { name: 'Reviews', href: '#' },
+            { name: 'Cheats', href: 'cheats' },
+            { name: 'Games', href: 'games' },
+            { name: 'Videos', href: 'videos' },
+            { name: 'Reviews', href: 'reviews' },
         ],
     },
     {
         title: 'Cheats',
         links: [
-            { name: 'Black Ops 4', href: '#' },
-            { name: 'Black Ops 3', href: '#' },
-            { name: 'Black Ops 2', href: '#' },
-            { name: 'Black Ops 1', href: '#' },
+            { name: 'Black Ops 4', href: 'https://github.com/OmegazonCMoi/COD-TOOLS' },
+            { name: 'Black Ops 3', href: 'cheats#blackops3' },
+            { name: 'Black Ops 2', href: 'cheats#blackops2' },
+            { name: 'Black Ops 1', href: 'cheats#blackops1' },
         ],
     },
     {
