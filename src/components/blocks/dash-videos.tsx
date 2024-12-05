@@ -20,12 +20,6 @@ const AdminPanelVideos: React.FC = () => {
         setIsModalOpen(false);
     };
 
-    // Save a new video from the modal
-    const handleSaveNewVideo = (newVideo: any) => {
-        setNewVideoData(newVideo);
-        setIsModalOpen(false);
-    };
-
     // Add a new video to the database
     const handleCreateVideo = async (newVideo: any) => {
         try {
@@ -41,6 +35,7 @@ const AdminPanelVideos: React.FC = () => {
 
             const data = await response.json();
             setVideos((prevVideos) => [...prevVideos, data]);
+            handleCloseModal(); // Close the modal after saving
         } catch {
             setError('Failed to create video');
         }
@@ -61,27 +56,44 @@ const AdminPanelVideos: React.FC = () => {
         }
     };
 
-    // Edit an existing video
     const handleEditVideo = async (updatedVideo: any) => {
         try {
+            // Create a new object with only the fields that need to be updated
+            const fieldsToUpdate = { ...updatedVideo };
+
+            // Skip the fields managed by the database (e.g., created_at, updated_at, img)
+            delete fieldsToUpdate.created_at;
+            delete fieldsToUpdate.updated_at;
+            delete fieldsToUpdate.img;
+
+            // Send the PUT request with the filtered fields
             const response = await fetch(`http://localhost:3002/api/videos/${updatedVideo.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedVideo),
+                body: JSON.stringify(fieldsToUpdate), // Send only the necessary fields
             });
 
-            if (!response.ok) throw new Error('Failed to update video');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update video');
+            }
 
             const data = await response.json();
+            console.log('Updated video:', data);
 
-            setVideos((prevVideos) =>
-                prevVideos.map((video) => (video.id === data.id ? data : video))
-            );
+            // Update the local state with the new data
+            setVideos((prevVideos) => {
+                const index = prevVideos.findIndex((video) => video.id === updatedVideo.id);
+                if (index === -1) return prevVideos;
+                prevVideos[index] = data;
+                return [...prevVideos];
+            });
 
-            setEditingVideoIndex(null); // Close the edit form/modal
-        } catch {
+            setEditingVideoIndex(null); // Close the modal after saving
+        } catch (err) {
+            console.error('Error during video update:', err);
             setError('Failed to update video');
         }
     };
@@ -175,7 +187,7 @@ const AdminPanelVideos: React.FC = () => {
             </div>
 
             {isModalOpen && (
-                <DashVideosNew onSave={handleSaveNewVideo} onClose={handleCloseModal} />
+                <DashVideosNew onSave={handleCreateVideo} onClose={handleCloseModal} />
             )}
             {editingVideoIndex !== null && (
                 <DashEditVideos

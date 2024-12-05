@@ -13,37 +13,14 @@ import {
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { useAuth } from '../../hooks/auth-context';
+import { useAuth } from '@/hooks/auth-context';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
     const sectionRef = useRef(null);
-
-    const { isLoggedIn, user, setIsLoggedIn, setUser } = useAuth();
-
-    useEffect(() => {
-        // Check if there's any authentication data in localStorage when the component mounts
-        if (typeof window !== 'undefined') {
-            const isConnected = localStorage.getItem('isConnected') === 'true'; // Check if user is logged in
-            if (isConnected) {
-                const storedUser = localStorage.getItem('user');
-                if (storedUser && storedUser !== 'undefined') {
-                    try {
-                        const parsedUser = JSON.parse(storedUser);
-                        // Set the user state and login state
-                        setUser(parsedUser);
-                        setIsLoggedIn(true);
-                    } catch {
-                        setIsLoggedIn(false);
-                        setUser(null);
-                    }
-                }
-            } else {
-                setIsLoggedIn(false);
-                setUser(null);
-            }
-        }
-    }, [setIsLoggedIn, setUser]);
+    const pathname = usePathname(); // Get the current path
+    const { isLoggedIn, user } = useAuth(); // Using useAuth directly to get the current login state and user info
 
     const isAdmin = user?.roles?.includes('Administrateur');
 
@@ -112,9 +89,11 @@ const Navbar = () => {
                             <NavigationMenu>
                                 <NavigationMenuList>
                                     <NavigationMenuItem className="text-muted-foreground navbar-item opacity-0">
-                                        <NavigationMenuTrigger>
-                                            Cheats
-                                        </NavigationMenuTrigger>
+                                        <Link href="cheats">
+                                            <NavigationMenuTrigger>
+                                                Cheats
+                                            </NavigationMenuTrigger>
+                                        </Link>
                                         <NavigationMenuContent>
                                             <ul className="w-80 p-3">
                                                 {subMenuItemsOne.map((item, idx) => (
@@ -123,7 +102,7 @@ const Navbar = () => {
                                                             className={cn(
                                                                 'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                                                             )}
-                                                            href="/"
+                                                            href={item.link}
                                                         >
                                                             {item.icon}
                                                             <div>
@@ -195,7 +174,12 @@ const Navbar = () => {
                             </Link>
                         </div>
                     </div>
-                    <div className="navbar-socials flex items-center space-x-6 opacity-0">
+                    <div
+                        className={cn(
+                            'navbar-socials flex items-center space-x-6 opacity-0',
+                            pathname === '/dashboard' ? 'mr-20' : ''
+                        )}
+                    >
                         {!isLoggedIn ? (
                             <>
                                 <Link href="login">
@@ -206,7 +190,7 @@ const Navbar = () => {
                                 </Link>
                             </>
                         ) : (
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-4" id="buttonsConnection">
                                 <span className="text-gray-800 font-medium">{user?.name || 'User'}</span>
                                 {isAdmin ? (
                                     <Link href="dashboard">

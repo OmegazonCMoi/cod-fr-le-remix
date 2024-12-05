@@ -42,6 +42,38 @@ const AdminPanelGames = () => {
         }
     };
 
+    const handleModifyGame = async (updatedGame: any) => {
+        try {
+            // Make a PUT request to update the game
+            const response = await fetch(`http://localhost:3002/api/games/${updatedGame.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedGame),
+            });
+
+            // Check if the response is successful
+            if (!response.ok) throw new Error('Failed to update game');
+
+            const data = await response.json();
+
+            // Update the local state to reflect the game changes
+            setGames((prevGames) => {
+                const index = prevGames.findIndex((game) => game.id === updatedGame.id);
+                if (index === -1) return prevGames; // If game not found, return the same list
+                prevGames[index] = data; // Update the game in the list
+                return [...prevGames];
+            });
+
+            // Close the modal after saving
+            setEditingGameIndex(null); // This will close the edit modal
+
+        } catch {
+            setError('Failed to update game');
+        }
+    };
+
     const handleDelete = async (gameId: number) => {
         try {
             const response = await fetch(`http://localhost:3002/api/games/${gameId}`, {
@@ -143,7 +175,7 @@ const AdminPanelGames = () => {
             {editingGameIndex !== null && (
                 <DashEditGames
                     game={games[editingGameIndex]}
-                    onSave={handleCreateGame}
+                    onSave={handleModifyGame}
                     onClose={() => setEditingGameIndex(null)}
                 />
             )}

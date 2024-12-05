@@ -1,33 +1,25 @@
 'use client';
 
 import React, { useState } from 'react';
-import bcrypt from 'bcryptjs';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 
 const Signup = () => {
     const router = useRouter();
-    // Separate state for form data and plain password
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        password: '',
         roles: 'Utilisateur',
     });
-    const [plainPassword, setPlainPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-
-        if (name === 'password') {
-            setPlainPassword(value); // Update plain password
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+        setFormData({ ...formData, [name]: value });
     };
 
     // Handle form submission
@@ -37,34 +29,26 @@ const Signup = () => {
         setSuccess('');
 
         try {
-            // Hash the password client-side
-            const hashedPassword = await bcrypt.hash(plainPassword, 10);
-
-            // Prepare data for submission (including the hashed password)
-            const submitData = {
-                ...formData,
-                password: hashedPassword,
-            };
-
             // Submit data to the server
-            const response = await fetch('http://localhost:3002/api/users/', {
+            const response = await fetch('http://localhost:3002/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(submitData),
+                body: JSON.stringify(formData),
             });
 
             const data = await response.json();
 
             if (response.ok) {
                 setSuccess('Account created successfully!');
-                setFormData({ name: '', email: '', roles: 'Utilisateur' });
+                setFormData({ name: '', email: '', password: '', roles: 'Utilisateur' });
                 router.push('/login'); // Redirect to login page
             } else {
                 setError(data.message || 'Something went wrong. Please try again.');
             }
-        } catch {
+        } catch (err) {
+            console.error(err);
             setError('An error occurred. Please try again.');
         }
     };
@@ -128,7 +112,7 @@ const Signup = () => {
                                         type="password"
                                         placeholder="Enter your password"
                                         name="password"
-                                        value={plainPassword}
+                                        value={formData.password}
                                         onChange={handleChange}
                                         required
                                         autoComplete="new-password"

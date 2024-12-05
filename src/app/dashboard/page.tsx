@@ -8,9 +8,8 @@ import AdminPanelGames from '@/components/blocks/dash-games';
 import AdminPanelVideos from '@/components/blocks/dash-videos';
 import AdminPanelFiles from '@/components/blocks/dash-files';
 import AdminPanelReviews from '@/components/blocks/dash-reviews';
-import { withAdminProtection } from '@/hooks/useAdminGuard';
 import AccountPage from '@/components/blocks/account';
-
+import { withAdminProtection } from '@/hooks/useAdminGuard';
 
 const AdminPanel = () => {
     const [selectedComponent, setSelectedComponent] = useState<string>('Dashboard');

@@ -5,40 +5,82 @@ export const withAdminProtection = <T extends object>(WrappedComponent: React.Co
     const ProtectedComponent = (props: T) => {
         const router = useRouter();
         const [loading, setLoading] = useState(true);
+        const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
         useEffect(() => {
-            // Get userId from localStorage
-            const userId = localStorage.getItem('userId');
+            const userData = localStorage.getItem('user'); // Adjust the key to match your localStorage structure
+            let token: string | null = null;
 
-            if (userId) {
-                // Fetch the user data by userId
-                fetch(`http://localhost:3002/api/users/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.roles === 'Administrateur') {
-                            setLoading(false);
-                        } else {
-                            router.push('/403'); // Redirect to a 403 page if not admin
-                        }
-                    })
-                    .catch(() => {
-                        router.push('/403'); // Redirect to 403 if user data cannot be fetched
-                    });
-            } else {
-                router.push('/login'); // If no userId found in localStorage, redirect to login
+            try {
+                const parsedData = userData ? JSON.parse(userData) : null;
+                token = parsedData?.token || null;
+            } catch (error) {
+                console.error('Error parsing token from localStorage:', error);
             }
+
+            if (!token) {
+                console.warn('No valid token found, redirecting to login.');
+                redirectTo('/login');
+                return;
+            }
+
+            const fetchUserData = async () => {
+                try {
+                    const response = await fetch('http://localhost:3002/api/users', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch user data: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    // Since data is an array, we need to access the first element to get the roles
+                    const user = data?.[0]; // Get the first user object in the array
+
+                    const roles = user?.roles; // Access roles of the first object in the array
+
+                    if (!roles) {
+                        console.warn('No roles found, redirecting to 403.');
+                        redirectTo('/403');
+                        return;
+                    }
+
+                    if (typeof roles === 'string' && roles.trim() === 'Administrateur') {
+                        console.log('User has admin privileges');
+                        setIsAuthorized(true);
+                    } else {
+                        console.warn('User does not have admin privileges, redirecting to 403.');
+                        redirectTo('/403');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    redirectTo('/403');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchUserData();
         }, [router]);
+
+        const redirectTo = (path: string) => {
+            router.push(path);
+            setIsAuthorized(false);
+        };
 
         if (loading) {
             return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
         }
 
-        // Render the protected page after the loading state is set to false
+        if (!isAuthorized) {
+            return null;
+        }
+
         return <WrappedComponent {...props} />;
     };
 
