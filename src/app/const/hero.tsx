@@ -13,7 +13,7 @@ export const integrations = [
             icon: (
                 <img
                     alt="Integration"
-                    src="/images/blackops3-logo.png"
+                    src="/images/blackops1-logo.png"
                 />
             ),
         },
@@ -31,7 +31,7 @@ export const integrations = [
             icon: (
                 <img
                     alt="Integration"
-                    src="/images/blackops1-logo.png"
+                    src="/images/blackops3-logo.png"
                 />
             ),
         },

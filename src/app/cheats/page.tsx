@@ -112,7 +112,7 @@ const CheatsPage = () => {
             ))}
 
             <p ref={footerRef} className="footer-text text-center pb-10 opacity-0">
-                These videos are examples! Cheats presented in these videos may not be available!
+                These videos are examples and not from us! Cheats presented in these videos may not be available!
             </p>
 
             <Footer />

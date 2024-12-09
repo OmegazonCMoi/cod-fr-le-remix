@@ -7,13 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
 import Footer from '@/components/blocks/footer';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'; // ShadCN Select components
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const Games = () => {
     const [games, setGames] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
-    const [selectedLinks, setSelectedLinks] = useState<{ [key: string]: string }>({});
-    const [selectedOption, setSelectedOption] = useState<string>(''); // To store selected option from the select
+    const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({}); // Individual state for each game
     const gameRefs = useRef<(HTMLDivElement | null)[]>([]); // Reference to game cards
 
     useEffect(() => {
@@ -43,23 +42,31 @@ const Games = () => {
                 }
             });
         }
-    }, [games]); // Trigger animation after games are loaded
+    }, [games]);
 
     const handleLinkSelection = (gameId: string) => {
+        const selectedOption = selectedOptions[gameId];
         const game = games.find((game) => game.id === gameId);
-        if (game && selectedOption) {
-            const link =
-                selectedOption === 'download'
-                    ? game.downloadLink
-                    : selectedOption === 'steam'
-                        ? game.steamLink
-                        : game.clientLink;
 
-            setSelectedLinks((prev) => ({
-                ...prev,
-                [gameId]: link,
-            }));
+        if (game && selectedOption) {
+            const link = game[selectedOption]; // Match the selected option key with the game object property
+            console.log('Selected Link:', link);
+
+            if (link) {
+                window.open(link, '_blank'); // Open the link in a new tab
+            } else {
+                alert('The selected link is not available for this game.');
+            }
+        } else {
+            alert('Please select an option before proceeding.');
         }
+    };
+
+    const handleSelectChange = (gameId: string, value: string) => {
+        setSelectedOptions((prev) => ({
+            ...prev,
+            [gameId]: value,
+        }));
     };
 
     return (
@@ -73,7 +80,6 @@ const Games = () => {
 
                     {error && <p className="text-red-500 text-xl">{error}</p>}
 
-                    {/* Grid for a single card per row */}
                     <div className="grid grid-cols-1 gap-8 items-center justify-items-center mb-10">
                         {games.map((game, idx) => (
                             <Card
@@ -102,14 +108,17 @@ const Games = () => {
                                 {/* Footer with ShadCN select dropdown and button */}
                                 <CardFooter className="flex flex-col justify-center items-center w-1/3 py-4">
                                     {/* ShadCN Select Dropdown */}
-                                    <Select value={selectedOption} onValueChange={setSelectedOption}>
+                                    <Select
+                                        value={selectedOptions[game.id] || ''} // Individual state for each game
+                                        onValueChange={(value) => handleSelectChange(game.id, value)}
+                                    >
                                         <SelectTrigger className="mb-4 p-2 border border-gray-300 rounded-md w-[150px]">
-                                            <SelectValue placeholder="Select Link" />
+                                            <SelectValue placeholder="Select an action" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="download">Download Link</SelectItem>
-                                            <SelectItem value="steam">Steam Link</SelectItem>
-                                            <SelectItem value="client">Client Link</SelectItem>
+                                            <SelectItem value="download_link">Download Link</SelectItem>
+                                            <SelectItem value="steam_link">Steam Link</SelectItem>
+                                            <SelectItem value="client_link">Client Link</SelectItem>
                                         </SelectContent>
                                     </Select>
 

@@ -120,7 +120,7 @@ const Navbar = () => {
                                         </NavigationMenuContent>
                                     </NavigationMenuItem>
                                     <NavigationMenuItem className="text-muted-foreground navbar-item opacity-0">
-                                        <NavigationMenuTrigger>Games</NavigationMenuTrigger>
+                                        <a href="games"><NavigationMenuTrigger>Games</NavigationMenuTrigger></a>
                                         <NavigationMenuContent>
                                             <ul className="w-80 p-3">
                                                 {subMenuItemsTwo.map((item, idx) => (
@@ -168,7 +168,7 @@ const Navbar = () => {
                                         variant: 'ghost',
                                     })
                                 )}
-                                href="#"
+                                href="reviews"
                             >
                                 Reviews
                             </Link>
