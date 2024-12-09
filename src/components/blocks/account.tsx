@@ -74,7 +74,7 @@ const AccountPage: React.FC = () => {
             } else {
                 setMessage(data.message || 'Failed to update profile.');
             }
-        } catch (error) {
+        } catch {
             setMessage('An error occurred. Please try again.');
         } finally {
             setLoading(false);
