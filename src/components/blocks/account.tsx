@@ -9,16 +9,18 @@ import { animate, inView } from 'motion';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
+import clsx from 'clsx';
 
 const AccountPage: React.FC = () => {
     const { user, setUser, token, logout } = useAuth();
     const router = useRouter();
 
-    const formData = {
+    const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
         password: '',
-    };
+    });
+
     const [formDataReview, setFormDataReview] = useState({
         user_name: '',
         note: 1,
@@ -29,6 +31,11 @@ const AccountPage: React.FC = () => {
     const [messageType, setMessageType] = useState<'success' | 'error' | ''>(''); // For styling messages
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null);
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
     const fetchReviews = useCallback(async () => {
         try {
@@ -52,18 +59,18 @@ const AccountPage: React.FC = () => {
 
     useEffect(() => {
         if (sectionRef.current) {
-            inView(
-                sectionRef.current,
-                () => {
-                    animate('.profile-header', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
-                    animate('.input-group', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.2 });
-                    animate('.button-group', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.4 });
-                    animate('.review-header', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.6 });
-                    animate('.input-review', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.8 });
-                    animate('.modify-button', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 1 });
-                    animate('.logout-button', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 1.2 });
-                },
-                { amount: 0.8 }
+            const sequence = [
+                { target: '.profile-header', delay: 0 },
+                { target: '.input-group', delay: 0.2 },
+                { target: '.button-group', delay: 0.4 },
+                { target: '.review-header', delay: 0.6 },
+                { target: '.input-review', delay: 0.8 },
+                { target: '.modify-button', delay: 1 },
+                { target: '.logout-button', delay: 1.2 },
+            ];
+
+            sequence.forEach(({ target, delay }) =>
+                animate(target, { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay })
             );
         }
     }, []);
@@ -84,6 +91,14 @@ const AccountPage: React.FC = () => {
                 setLoading(false);
                 return;
             }
+
+            if (!validateEmail(formData.email)) {
+                setMessage('Invalid email address.');
+                setMessageType('error');
+                setLoading(false);
+                return;
+            }
+
             const response = await fetch(`https://express-cod-fr.vercel.app/api/users/${user.id}`, {
                 method: 'PUT',
                 headers: {
@@ -111,8 +126,12 @@ const AccountPage: React.FC = () => {
         }
     };
 
-    const handleChange = (name: string, value: string) => {
-        setFormDataReview({ ...formDataReview, [name]: value });
+    const handleChange = (name: string, value: string, isReview = false) => {
+        if (isReview) {
+            setFormDataReview((prev) => ({ ...prev, [name]: name === 'note' ? parseInt(value, 10) : value }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleLogout = () => {
@@ -153,7 +172,6 @@ const AccountPage: React.FC = () => {
             setMessageType('error');
         }
     };
-
 
     return (
         <div className="p-6 mx-auto max-w-2xl" ref={sectionRef}>
@@ -213,14 +231,14 @@ const AccountPage: React.FC = () => {
                         id="user_name"
                         placeholder="Enter your name"
                         value={formDataReview.user_name}
-                        onChange={(e) => handleChange('user_name', e.target.value)}
+                        onChange={(e) => handleChange('user_name', e.target.value, true)}
                     />
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor="note" className="text-sm font-medium">Rating</Label>
                     <Select
                         value={formDataReview.note.toString()}
-                        onValueChange={(value) => handleChange('note', value)}
+                        onValueChange={(value) => handleChange('note', value, true)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select a rating (1 to 5)" />
@@ -240,7 +258,7 @@ const AccountPage: React.FC = () => {
                         id="message"
                         placeholder="Share your experience..."
                         value={formDataReview.message}
-                        onChange={(e) => handleChange('message', e.target.value)}
+                        onChange={(e) => handleChange('message', e.target.value, true)}
                     />
                 </div>
                 <Button type="submit" className="w-full modify-button">Modify Review</Button>
@@ -255,8 +273,10 @@ const AccountPage: React.FC = () => {
                 </Button>
                 {message && (
                     <div
-                        className={`message-box mt-6 text-center p-2 rounded ${messageType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
-                            }`}
+                        className={clsx(
+                            'message-box mt-6 text-center p-2 rounded',
+                            messageType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                        )}
                     >
                         {message}
                     </div>
