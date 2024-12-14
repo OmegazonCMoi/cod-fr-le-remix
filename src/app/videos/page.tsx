@@ -19,7 +19,7 @@ const Videos = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await fetch('http://localhost:3002/api/videos');
+                const response = await fetch('https://express-cod-fr.vercel.app/api/videos');
                 if (!response.ok) throw new Error('Failed to fetch videos');
                 const data = await response.json();
                 setVideos(data);

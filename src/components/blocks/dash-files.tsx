@@ -8,7 +8,7 @@ const DashFiles: React.FC = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await fetch('http://localhost:3002/api/files');
+            const response = await fetch('https://express-cod-fr.vercel.app/api/files');
             if (!response.ok) throw new Error('Failed to fetch files');
             const data = await response.json();
             setFiles(data);
@@ -25,7 +25,7 @@ const DashFiles: React.FC = () => {
 
         setIsUploading(true);
         try {
-            const response = await fetch('http://localhost:3002/api/files/upload', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/files/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -42,7 +42,7 @@ const DashFiles: React.FC = () => {
 
     const handleDeleteFile = async (filename: string) => {
         try {
-            const response = await fetch(`http://localhost:3002/api/files/${filename}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/files/${filename}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Failed to delete file');
@@ -62,7 +62,7 @@ const DashFiles: React.FC = () => {
     }, []);
 
     return (
-        <div className="p-6 mt-20">
+        <div className="p-6">
             <h2 className="text-3xl font-semibold text-gray-900">Manage Files in Assets</h2>
             <p className='text-red-500'>Not available. Work in progess...</p>
 

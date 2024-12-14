@@ -56,7 +56,7 @@ const Testimonial = () => {
                                         &ldquo;{testimonial.text}&rdquo;
                                     </p>
                                     <Avatar className="mb-2 size-12 md:size-24">
-                                        <AvatarImage src={testimonial.avatar} />
+                                        <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
                                         <AvatarFallback>{testimonial.name}</AvatarFallback>
                                     </Avatar>
                                     <p className="mb-1 text-sm font-medium md:text-lg">

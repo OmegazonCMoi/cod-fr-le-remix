@@ -16,13 +16,15 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/auth-context';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import '@/app/globals.css';
 
 const Navbar = () => {
     const sectionRef = useRef(null);
     const pathname = usePathname(); // Get the current path
     const { isLoggedIn, user } = useAuth(); // Using useAuth directly to get the current login state and user info
 
-    const isAdmin = user?.roles?.includes('Administrateur');
+    const isAdmin = user?.roles?.includes('a9$K7,TL4_Tdt+3-?4WU9~n8j/W4rS.KSnca!9:8Kbrf*49zX9');
+    const isVip = user?.roles?.includes('x8=VYp-pL4x5E?9GA!:BpYU^F6*b853.t%X+~g2c88zxyg,42F');
 
     useEffect(() => {
         if (sectionRef.current) {
@@ -125,11 +127,11 @@ const Navbar = () => {
                                             <ul className="w-80 p-3">
                                                 {subMenuItemsTwo.map((item, idx) => (
                                                     <li key={idx}>
-                                                        <a
+                                                        <Link
                                                             className={cn(
                                                                 'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                                                             )}
-                                                            href="#"
+                                                            href={item.link}
                                                         >
                                                             {item.icon}
                                                             <div>
@@ -140,7 +142,7 @@ const Navbar = () => {
                                                                     {item.description}
                                                                 </p>
                                                             </div>
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -192,15 +194,26 @@ const Navbar = () => {
                         ) : (
                             <div className="flex items-center space-x-4" id="buttonsConnection">
                                 <span className="text-gray-800 font-medium">{user?.name || 'User'}</span>
+                                {isVip && (
+                                    <div className="badges">
+                                        <button className="yellow">VIP</button>
+                                    </div>
+                                )}
                                 {isAdmin ? (
-                                    <Link href="dashboard">
-                                        <Button>Dashboard</Button>
-                                    </Link>
+                                    <>
+                                        <div className="badges">
+                                            <button className="grey">Founder</button>
+                                        </div>
+                                        <Link href="dashboard">
+                                            <Button>Dashboard</Button>
+                                        </Link>
+                                    </>
                                 ) : (
                                     <Link href="account">
                                         <Button>Account</Button>
                                     </Link>
                                 )}
+
                             </div>
                         )}
                     </div>

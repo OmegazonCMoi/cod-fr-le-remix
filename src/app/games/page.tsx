@@ -78,12 +78,13 @@ const Games = () => {
                         All Available Games
                     </h1>
 
-                    {error && <p className="text-red-500 text-xl">{error}</p>}
+                    {error && <p className="text-red-500 text-xl">{error} Maybe try to reload the page dumbass.</p>}
 
                     <div className="grid grid-cols-1 gap-8 items-center justify-items-center mb-10">
                         {games.map((game, idx) => (
                             <Card
                                 key={game.id}
+                                id={game.id}
                                 className="w-full md:w-[800px] lg:w-[1100px] h-full flex flex-row items-center"
                                 ref={(el) => { gameRefs.current[idx] = el; }} // Set reference to the card
                             >
@@ -105,7 +106,6 @@ const Games = () => {
                                     </CardHeader>
                                 </div>
 
-                                {/* Footer with ShadCN select dropdown and button */}
                                 <CardFooter className="flex flex-col justify-center items-center w-1/3 py-4">
                                     {/* ShadCN Select Dropdown */}
                                     <Select

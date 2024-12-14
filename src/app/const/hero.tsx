@@ -5,14 +5,14 @@ export const integrations = [
         {
             id: 'integration-1',
             icon: (
-                src ? <img alt="" src={src} /> : null
+                src ? <img alt="null" src={src} /> : null
             ),
         },
         {
             id: 'integration-2',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Black Ops 1 Logo"
                     src="/images/blackops1-logo.png"
                 />
             ),
@@ -21,7 +21,7 @@ export const integrations = [
             id: 'integration-3',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Black Ops 2 Logo"
                     src="/images/blackops2-logo.png"
                 />
             ),
@@ -30,7 +30,7 @@ export const integrations = [
             id: 'integration-4',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Black Ops 3 Logo"
                     src="/images/blackops3-logo.png"
                 />
             ),
@@ -39,7 +39,7 @@ export const integrations = [
             id: 'integration-5',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Black Ops 4 Logo"
                     src="/images/blackops4-logo.png"
                 />
             ),
@@ -50,7 +50,7 @@ export const integrations = [
             id: 'integration-6',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Infinite Warfare Logo"
                     src="/images/infinitewarfare-logo.png"
                 />
             ),
@@ -59,7 +59,7 @@ export const integrations = [
             id: 'integration-7',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="World War 2 Logo"
                     src="/images/ww2-logo.png"
                 />
             ),
@@ -68,7 +68,7 @@ export const integrations = [
             id: 'integration-8',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="World at War Logo"
                     src="/images/waw-logo.png"
                 />
             ),
@@ -77,7 +77,7 @@ export const integrations = [
             id: 'integration-9',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Ghosts Logo"
                     src="/images/ghosts-logo.png"
                 />
             ),
@@ -86,7 +86,7 @@ export const integrations = [
             id: 'integration-10',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Cold War Logo"
                     src="/images/blackopscw-logo.png"
                 />
             ),
@@ -96,14 +96,14 @@ export const integrations = [
         {
             id: 'integration-11',
             icon: (
-                src ? <img alt="" src={src} /> : null
+                src ? <img alt="null" src={src} /> : null
             ),
         },
         {
             id: 'integration-12',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Advanced Warfare Logo"
                     src="/images/advancedwarfare-logo.png"
                 />
             ),
@@ -112,7 +112,7 @@ export const integrations = [
             id: 'integration-13',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Modern Warfare Logo"
                     src="/images/modernwarfare-logo.png"
                 />
             ),
@@ -121,7 +121,7 @@ export const integrations = [
             id: 'integration-14',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Modern Warfare 3 Logo"
                     src="/images/modernwarfare3-logo.png"
                 />
             ),
@@ -130,7 +130,7 @@ export const integrations = [
             id: 'integration-15',
             icon: (
                 <img
-                    alt="Integration"
+                    alt="Vanguard Logo"
                     src="/images/vanguard-logo.png"
                 />
             ),

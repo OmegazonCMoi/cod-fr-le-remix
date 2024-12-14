@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import DashEditVideos from './dash-videos-edit'; // Edit modal/form
 import DashVideosNew from './dash-videos-new'; // New video modal/form
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '../ui/table'; // Ensure the table components are imported
 
 const AdminPanelVideos: React.FC = () => {
     const [videos, setVideos] = useState<any[]>([]);
@@ -10,24 +18,14 @@ const AdminPanelVideos: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newVideoData, setNewVideoData] = useState<any | null>(null);
 
-    // Open the "Add New Video" modal
-    const handleOpenModal = () => {
-        setIsModalOpen(true); // This will trigger the re-render
-    };
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
 
-    // Close the "Add New Video" modal
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
-    // Add a new video to the database
     const handleCreateVideo = async (newVideo: any) => {
         try {
-            const response = await fetch('http://localhost:3002/api/videos', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/videos', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newVideo),
             });
 
@@ -35,16 +33,15 @@ const AdminPanelVideos: React.FC = () => {
 
             const data = await response.json();
             setVideos((prevVideos) => [...prevVideos, data]);
-            handleCloseModal(); // Close the modal after saving
+            handleCloseModal();
         } catch {
             setError('Failed to create video');
         }
     };
 
-    // Delete a video
     const handleDelete = async (videoId: number) => {
         try {
-            const response = await fetch(`http://localhost:3002/api/videos/${videoId}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/videos/${videoId}`, {
                 method: 'DELETE',
             });
 
@@ -58,32 +55,20 @@ const AdminPanelVideos: React.FC = () => {
 
     const handleEditVideo = async (updatedVideo: any) => {
         try {
-            // Create a new object with only the fields that need to be updated
             const fieldsToUpdate = { ...updatedVideo };
-
-            // Skip the fields managed by the database (e.g., created_at, updated_at, img)
             delete fieldsToUpdate.created_at;
             delete fieldsToUpdate.updated_at;
             delete fieldsToUpdate.img;
 
-            // Send the PUT request with the filtered fields
-            const response = await fetch(`http://localhost:3002/api/videos/${updatedVideo.id}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/videos/${updatedVideo.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(fieldsToUpdate), // Send only the necessary fields
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fieldsToUpdate),
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to update video');
-            }
+            if (!response.ok) throw new Error('Failed to update video');
 
             const data = await response.json();
-            console.log('Updated video:', data);
-
-            // Update the local state with the new data
             setVideos((prevVideos) => {
                 const index = prevVideos.findIndex((video) => video.id === updatedVideo.id);
                 if (index === -1) return prevVideos;
@@ -91,18 +76,16 @@ const AdminPanelVideos: React.FC = () => {
                 return [...prevVideos];
             });
 
-            setEditingVideoIndex(null); // Close the modal after saving
-        } catch (err) {
-            console.error('Error during video update:', err);
+            setEditingVideoIndex(null);
+        } catch {
             setError('Failed to update video');
         }
     };
 
-    // Fetch all videos on component mount
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await fetch('http://localhost:3002/api/videos');
+                const response = await fetch('https://express-cod-fr.vercel.app/api/videos');
                 if (!response.ok) throw new Error('Failed to fetch videos');
                 const data = await response.json();
                 setVideos(data);
@@ -114,17 +97,15 @@ const AdminPanelVideos: React.FC = () => {
         fetchVideos();
     }, []);
 
-    // Trigger video creation after modal submission
     useEffect(() => {
         if (newVideoData) {
-            console.log('Creating new video:', newVideoData); // Debug log
             handleCreateVideo(newVideoData);
             setNewVideoData(null);
         }
     }, [newVideoData]);
 
     return (
-        <div className="p-6 mt-20">
+        <div className="p-6">
             <div className="flex mx-auto gap-4">
                 <h2 className="text-3xl font-semibold text-gray-900">Videos Management</h2>
                 <Button className="px-8" onClick={handleOpenModal}>
@@ -150,45 +131,42 @@ const AdminPanelVideos: React.FC = () => {
 
             {error && <p className="text-red-500 mt-4">{error}</p>}
 
-            <div className="overflow-x-auto mt-8 rounded-lg">
-                <table className="min-w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr className="bg-white">
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Title</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700 w-1/4">Description</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700 w-1/4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div className="overflow-x-auto mt-8 rounded-lg border-gray-200">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Description</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {videos.map((video, index) => (
-                            <tr key={video.id} className="border-t border-gray-200 bg-white">
-                                <td className="py-4 px-6 text-sm text-gray-800">{video.title}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800 truncate max-w-4xl">{video.description}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800 space-x-2">
-                                    <Button
-                                        onClick={() => {
-                                            setEditingVideoIndex(index);
-                                        }}
-                                        className="bg-neutral-700 text-white hover:bg-yellow-600"
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(video.id)}
-                                        className="bg-neutral-600 text-white hover:bg-red-600"
-                                    >
-                                        Delete
-                                    </Button>
-                                </td>
-                            </tr>
+                            <TableRow key={video.id}>
+                                <TableCell>{video.title}</TableCell>
+                                <TableCell className="truncate max-w-4xl">{video.description}</TableCell>
+                                <TableCell>
+                                    <div className="space-x-2">
+                                        <Button
+                                            onClick={() => setEditingVideoIndex(index)}
+                                            variant={'secondary'}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleDelete(video.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
 
-            {isModalOpen && (
-                <DashVideosNew onSave={handleCreateVideo} onClose={handleCloseModal} />
-            )}
+            {isModalOpen && <DashVideosNew onSave={handleCreateVideo} onClose={handleCloseModal} />}
             {editingVideoIndex !== null && (
                 <DashEditVideos
                     video={videos[editingVideoIndex]}

@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import DashEditUser from './dash-user-edit'; // Edit user modal
 import DashUserNew from './dash-user-new'; // New user modal
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const AdminPanelUser = () => {
     const [users, setUsers] = useState<any[]>([]); // Users state
@@ -16,7 +24,7 @@ const AdminPanelUser = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://localhost:3002/api/users');
+                const response = await fetch('https://express-cod-fr.vercel.app/api/users');
                 if (!response.ok) throw new Error('Failed to fetch users');
                 const data = await response.json();
                 setUsers(data);
@@ -34,7 +42,7 @@ const AdminPanelUser = () => {
     // Handle user deletion
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3002/api/users/${id}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/users/${id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Failed to delete user');
@@ -59,7 +67,7 @@ const AdminPanelUser = () => {
             };
 
             // Make a PUT request to update the user
-            const response = await fetch(`http://localhost:3002/api/users/${updatedUser.id}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/users/${updatedUser.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +102,7 @@ const AdminPanelUser = () => {
     // Handle adding a new user
     const handleSaveNewUser = async (newUser: any) => {
         try {
-            const response = await fetch('http://localhost:3002/api/users', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newUser),
@@ -119,7 +127,7 @@ const AdminPanelUser = () => {
     }
 
     return (
-        <div className="p-6 mt-20">
+        <div className="p-6">
             <div className="flex items-center gap-4">
                 <h2 className="text-3xl font-semibold text-gray-900">Users Management</h2>
                 <Button onClick={() => setIsModalOpen(true)} className="px-8">
@@ -144,42 +152,56 @@ const AdminPanelUser = () => {
             <p className="text-lg text-gray-600 mt-2">Manage and edit user roles.</p>
 
             <div className="overflow-x-auto mt-8 rounded-lg">
-                <table className="min-w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr className="bg-white">
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">ID</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Name</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Email</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Role</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {users.map((user, index) => (
-                            <tr key={user.id} className="border-t border-gray-200 bg-white">
-                                <td className="py-4 px-6 text-sm text-gray-800">{user.id}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800">{user.name}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800">{user.email}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800">{user.roles}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800 space-x-2">
-                                    <Button
-                                        onClick={() => setEditingUserIndex(index)}
-                                        className=""
-                                        variant={'secondary'}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(user.id)}
-                                        className="text-white"
-                                    >
-                                        Delete
-                                    </Button>
-                                </td>
-                            </tr>
+                            <TableRow key={user.id}>
+                                <TableCell>{user.id}</TableCell>
+                                <TableCell>{user.name}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>
+                                    {(() => {
+                                        switch (user.roles) {
+                                            case 'a9$K7,TL4_Tdt+3-?4WU9~n8j/W4rS.KSnca!9:8Kbrf*49zX9':
+                                                return 'Administrateur';
+                                            case '93:7!+4heRcikj28iM66T3Q~E9YFja_.?-*,PCNRn2q%^yi92L':
+                                                return 'Utilisateur';
+                                            case 'x8=VYp-pL4x5E?9GA!:BpYU^F6*b853.t%X+~g2c88zxyg,42F':
+                                                return 'VIP';
+                                            default:
+                                                return 'Rôle inconnu';
+                                        }
+                                    })()}
+                                </TableCell>
+
+                                <TableCell>
+                                    <div className="space-x-2">
+                                        <Button
+                                            onClick={() => setEditingUserIndex(index)}
+                                            variant="secondary"
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleDelete(user.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
 
             {editingUserIndex !== null && (

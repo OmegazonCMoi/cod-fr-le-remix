@@ -3,11 +3,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { integrations } from '@/app/const/hero';
+import Link from 'next/link';
 
 const Hero = () => {
 
     return (
-        <section className="relative overflow-hidden w-full justify-center mx-auto flex flex-col pt-24 sm:pt-32 md:pt-48 animate-fadeIn">
+        <section className="relative overflow-hidden w-full justify-center mx-auto flex flex-col pt-20 sm:pt-24 md:pt-32 pb-16 animate-fadeIn">
             {/* Background SVG */}
             <div className="absolute inset-0 overflow-hidden">
                 <svg
@@ -46,24 +47,26 @@ const Hero = () => {
                             <h1 className="my-4 text-pretty text-3xl font-bold sm:text-4xl lg:text-6xl">
                                 Welcome to Hack on COD
                             </h1>
-                            <Button>
-                                Discover{' '}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-move-right"
-                                >
-                                    <path d="M18 8L22 12L18 16" />
-                                    <path d="M2 12H22" />
-                                </svg>
-                            </Button>
+                            <Link href="#whyus">
+                                <Button>
+                                    Discover{' '}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-move-right"
+                                    >
+                                        <path d="M18 8L22 12L18 16" />
+                                        <path d="M2 12H22" />
+                                    </svg>
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

@@ -27,7 +27,7 @@ const Feature = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="pt-56 pb-32 justify-center mx-auto flex">
+        <section ref={sectionRef} className="pt-56 pb-32 justify-center mx-auto flex" id='whyus'>
             <div className="container">
                 <p className="subtitle mb-4 text-sm text-muted-foreground lg:text-base hidden">
                     OUR VALUES

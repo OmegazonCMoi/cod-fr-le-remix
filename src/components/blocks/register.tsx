@@ -30,7 +30,7 @@ const Signup = () => {
 
         try {
             // Submit data to the server
-            const response = await fetch('http://localhost:3002/api/users', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const Signup = () => {
 
             if (response.ok) {
                 setSuccess('Account created successfully!');
-                setFormData({ name: '', email: '', password: '', roles: 'Utilisateur' });
+                setFormData({ name: '', email: '', password: '', roles: '93:7!+4heRcikj28iM66T3Q~E9YFja_.?-*,PCNRn2q%^yi92L' });
                 router.push('/login'); // Redirect to login page
             } else {
                 setError(data.message || 'Something went wrong. Please try again.');

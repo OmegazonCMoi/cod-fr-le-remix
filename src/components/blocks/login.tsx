@@ -37,7 +37,7 @@ const Login = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3002/api/users/login', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -48,7 +48,6 @@ const Login = () => {
             }
 
             const data = await response.json();
-            console.log(data);  // Log the data to check the response structure
 
             if (response.ok) {
                 setSuccess('Login successful!');

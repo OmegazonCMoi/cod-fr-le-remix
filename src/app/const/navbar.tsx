@@ -31,21 +31,25 @@ export const subMenuItemsOne = [
 
 export const subMenuItemsTwo = [
     {
+        link: '/games#4',
         title: 'Black Ops 3',
         description: 'The best Black Ops 3 experience you can get online.',
         icon: <Tally3 className="size-5 shrink-0" />,
     },
     {
+        link: '/games#8',
         title: 'Infinte Warfare',
         description: 'Infinite Warfare, finally the way it was meant to be played.',
         icon: <Swords className="size-5 shrink-0" />,
     },
     {
+        link: '/games#2',
         title: 'Plutonium',
         description: 'Plutonium experience, the best custom experience you can get.',
         icon: <Atom className="size-5 shrink-0" />,
     },
     {
+        link: '/games',
         title: 'Other Games',
         description:
             'We have a wide range of games available for you to play online.',

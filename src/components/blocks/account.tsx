@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useAuth } from '@/hooks/auth-context'; // Ensure you're importing from the updated context
+import { useAuth } from '@/hooks/auth-context';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { animate, inView } from 'motion';
+import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Textarea } from '../ui/textarea';
 
 const AccountPage: React.FC = () => {
-    const { user, setUser, token, logout } = useAuth(); // Use token from context
+    const { user, setUser, token, logout } = useAuth();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
@@ -16,20 +19,39 @@ const AccountPage: React.FC = () => {
         email: user?.email || '',
         password: '',
     });
+    const [formDataReview, setFormDataReview] = useState({
+        user_name: '',
+        note: 1,
+        message: '',
+    });
 
     const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState<'success' | 'error' | ''>(''); // For styling messages
     const [loading, setLoading] = useState(false);
+    const [reviewsLoaded, setReviewsLoaded] = useState(false);
     const sectionRef = useRef(null);
 
-    useEffect(() => {
-        if (!user) {
-            router.push('/login');
-        }
-    }, [user, router]);
+    const fetchReviews = async (p0: (prev: any) => any[]) => {
+        try {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/reviews/user/${user?.id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await response.json();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+            if (response.ok) {
+                if (data.length > 0) {
+                    const { user_name, note, message } = data[0]; // Use first review
+                    setFormDataReview({ user_name, note, message });
+                }
+                setReviewsLoaded(true);
+            } else {
+                setMessage(data.message || 'Failed to load reviews');
+                setMessageType('error');
+            }
+        } catch {
+            setMessage('An error occurred while fetching reviews');
+            setMessageType('error');
+        }
     };
 
     useEffect(() => {
@@ -40,27 +62,37 @@ const AccountPage: React.FC = () => {
                     animate('.profile-header', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
                     animate('.input-group', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.2 });
                     animate('.button-group', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.4 });
-                    animate('.logout-button', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.8 });
+                    animate('.review-header', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.6 });
+                    animate('.input-review', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 0.8 });
+                    animate('.modify-button', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 1 });
+                    animate('.logout-button', { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay: 1.2 });
                 },
                 { amount: 0.8 }
             );
         }
     }, []);
 
+    useEffect(() => {
+        if (user) fetchReviews((prev) => prev);
+    }, [user]);
+
     const handleUpdate = async () => {
         setLoading(true);
         setMessage('');
+        setMessageType('');
 
         try {
-            if (!user?.id) {
-                throw new Error('User ID is required for update');
+            if (!user) {
+                setMessage('User not found.');
+                setMessageType('error');
+                setLoading(false);
+                return;
             }
-
-            const response = await fetch(`http://localhost:3002/api/users/${user.id}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/users/${user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Use token from the auth context
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(formData),
             });
@@ -68,23 +100,64 @@ const AccountPage: React.FC = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Update user context with updated data
                 setUser({ ...user, name: formData.name, email: formData.email });
                 setMessage('Profile updated successfully!');
+                setMessageType('success');
             } else {
                 setMessage(data.message || 'Failed to update profile.');
+                setMessageType('error');
             }
         } catch {
             setMessage('An error occurred. Please try again.');
+            setMessageType('error');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleLogout = () => {
-        logout(); // Using the logout function from context
-        router.push('/login'); // Redirect to login page
+    const handleChange = (name: string, value: string) => {
+        setFormDataReview({ ...formDataReview, [name]: value });
     };
+
+    const handleLogout = () => {
+        logout();
+        router.push('/login');
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!formDataReview.user_name || !formDataReview.note || !formDataReview.message) {
+            setMessage('Please fill out all fields');
+            setMessageType('error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/reviews/${user?.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(formDataReview),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to submit review');
+            }
+
+            await fetchReviews((prev) => prev);
+
+            setMessage('Review submitted successfully!');
+            setMessageType('success');
+        } catch (error) {
+            setMessage('Failed to submit review');
+            setMessageType('error');
+        }
+    };
+
 
     return (
         <div className="p-6 mx-auto max-w-2xl" ref={sectionRef}>
@@ -92,34 +165,34 @@ const AccountPage: React.FC = () => {
             {user ? (
                 <div className="space-y-4">
                     <div className="space-y-2 input-group opacity-0">
-                        <label htmlFor="name" className="text-sm font-medium">Name</label>
+                        <Label htmlFor="name" className="text-sm font-medium">Name</Label>
                         <Input
                             id="name"
                             type="text"
                             name="name"
                             value={formData.name}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                         />
                     </div>
                     <div className="space-y-2 input-group opacity-0">
-                        <label htmlFor="email" className="text-sm font-medium">Email</label>
+                        <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                         <Input
                             id="email"
                             type="email"
                             name="email"
                             value={formData.email}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                         />
                     </div>
                     <div className="space-y-2 input-group opacity-0">
-                        <label htmlFor="password" className="text-sm font-medium">Password</label>
+                        <Label htmlFor="password" className="text-sm font-medium">Password</Label>
                         <Input
                             id="password"
                             type="password"
                             name="password"
                             placeholder="Enter a new password (optional)"
                             value={formData.password}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                         />
                     </div>
                     <div className="button-group opacity-0">
@@ -131,11 +204,52 @@ const AccountPage: React.FC = () => {
                             {loading ? 'Updating...' : 'Update Profile'}
                         </Button>
                     </div>
-                    {message && <p className="text-center mt-2 message opacity-0">{message}</p>}
                 </div>
             ) : (
                 <p>Loading user details...</p>
             )}
+
+            <h2 className="text-xl font-semibold mt-10 review-header">Modify your Review</h2>
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4 input-review">
+                <div className="space-y-1">
+                    <Label htmlFor="user_name" className="text-sm font-medium">Your Name</Label>
+                    <Input
+                        id="user_name"
+                        placeholder="Enter your name"
+                        value={formDataReview.user_name}
+                        onChange={(e) => handleChange('user_name', e.target.value)}
+                    />
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="note" className="text-sm font-medium">Rating</Label>
+                    <Select
+                        value={formDataReview.note.toString()}
+                        onValueChange={(value) => handleChange('note', value)}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a rating (1 to 5)" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">1 - Poor</SelectItem>
+                            <SelectItem value="2">2 - Fair</SelectItem>
+                            <SelectItem value="3">3 - Good</SelectItem>
+                            <SelectItem value="4">4 - Very Good</SelectItem>
+                            <SelectItem value="5">5 - Excellent</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="message" className="text-sm font-medium">Your Feedback</Label>
+                    <Textarea
+                        id="message"
+                        placeholder="Share your experience..."
+                        value={formDataReview.message}
+                        onChange={(e) => handleChange('message', e.target.value)}
+                    />
+                </div>
+                <Button type="submit" className="w-full modify-button">Modify Review</Button>
+            </form>
+
             <div className="mt-8">
                 <Button
                     onClick={handleLogout}
@@ -143,6 +257,14 @@ const AccountPage: React.FC = () => {
                 >
                     Logout
                 </Button>
+                {message && (
+                    <div
+                        className={`message-box mt-6 text-center p-2 rounded ${messageType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                            }`}
+                    >
+                        {message}
+                    </div>
+                )}
             </div>
         </div>
     );

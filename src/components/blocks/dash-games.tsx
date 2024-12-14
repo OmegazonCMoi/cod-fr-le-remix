@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import DashEditGames from './dash-games-edit';
 import DashGamesNew from './dash-games-new';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '../ui/table'; // Ensure the table components are imported
 
 const AdminPanelGames = () => {
     const [games, setGames] = useState<any[]>([]);
@@ -10,33 +18,26 @@ const AdminPanelGames = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newGameData, setNewGameData] = useState<any | null>(null);
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
 
     const handleSaveNewGame = (newGame: any) => {
-        setNewGameData(newGame); // Save the new game data temporarily in state
-        setIsModalOpen(false); // Close the modal after saving
+        setNewGameData(newGame);
+        setIsModalOpen(false);
     };
 
     const handleCreateGame = async (newGame: any) => {
         try {
-            const response = await fetch('http://localhost:3002/api/games', {
+            const response = await fetch('https://express-cod-fr.vercel.app/api/games', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newGame),
             });
 
             if (!response.ok) throw new Error('Failed to create game');
 
             const data = await response.json();
-            setGames((prevGames) => [...prevGames, data]); // Add the new game to the list
+            setGames((prevGames) => [...prevGames, data]);
         } catch {
             setError('Failed to create game');
         }
@@ -44,31 +45,24 @@ const AdminPanelGames = () => {
 
     const handleModifyGame = async (updatedGame: any) => {
         try {
-            // Make a PUT request to update the game
-            const response = await fetch(`http://localhost:3002/api/games/${updatedGame.id}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/games/${updatedGame.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedGame),
             });
 
-            // Check if the response is successful
             if (!response.ok) throw new Error('Failed to update game');
 
             const data = await response.json();
 
-            // Update the local state to reflect the game changes
             setGames((prevGames) => {
                 const index = prevGames.findIndex((game) => game.id === updatedGame.id);
-                if (index === -1) return prevGames; // If game not found, return the same list
-                prevGames[index] = data; // Update the game in the list
+                if (index === -1) return prevGames;
+                prevGames[index] = data;
                 return [...prevGames];
             });
 
-            // Close the modal after saving
-            setEditingGameIndex(null); // This will close the edit modal
-
+            setEditingGameIndex(null);
         } catch {
             setError('Failed to update game');
         }
@@ -76,7 +70,7 @@ const AdminPanelGames = () => {
 
     const handleDelete = async (gameId: number) => {
         try {
-            const response = await fetch(`http://localhost:3002/api/games/${gameId}`, {
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/games/${gameId}`, {
                 method: 'DELETE',
             });
 
@@ -88,18 +82,17 @@ const AdminPanelGames = () => {
         }
     };
 
-    // Effect hook to trigger the game creation side effect (API call) after the component has rendered
     useEffect(() => {
         if (newGameData) {
-            handleCreateGame(newGameData); // Create the game after render
-            setNewGameData(null); // Reset the newGameData after the request is made
+            handleCreateGame(newGameData);
+            setNewGameData(null);
         }
     }, [newGameData]);
 
     useEffect(() => {
         const fetchGames = async () => {
             try {
-                const response = await fetch('http://localhost:3002/api/games/');
+                const response = await fetch('https://express-cod-fr.vercel.app/api/games/');
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const data = await response.json();
                 setGames(data);
@@ -112,10 +105,10 @@ const AdminPanelGames = () => {
     }, []);
 
     return (
-        <div className="p-6 mt-20">
-            <div className='flex gap-4'>
+        <div className="p-6">
+            <div className="flex gap-4">
                 <h2 className="text-3xl font-semibold text-gray-900">Games Management</h2>
-                <Button className='px-8' onClick={handleOpenModal}>
+                <Button className="px-8" onClick={handleOpenModal}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -138,38 +131,39 @@ const AdminPanelGames = () => {
 
             {error && <p className="text-red-500 mt-4">{error}</p>}
 
-            <div className="overflow-x-auto mt-8 rounded-lg">
-                <table className="max-w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr className="bg-white">
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Title</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700 w-1/4">Description</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700 w-1/4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div className="overflow-x-auto mt-8 rounded-lg border-gray-200">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Description</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {games.map((game) => (
-                            <tr key={game.id} className="border-t border-gray-200 bg-white">
-                                <td className="py-4 px-6 text-sm text-gray-800">{game.title}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800 truncate max-w-4xl">{game.description}</td>
-                                <td className="py-4 px-6 text-sm text-gray-800 space-x-2">
-                                    <Button
-                                        onClick={() => setEditingGameIndex(games.indexOf(game))}
-                                        className="bg-neutral-700 text-white hover:bg-yellow-600"
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(game.id)} // Passing game.id
-                                        className="bg-neutral-600 text-white hover:bg-red-600"
-                                    >
-                                        Delete
-                                    </Button>
-                                </td>
-                            </tr>
+                            <TableRow key={game.id}>
+                                <TableCell>{game.title}</TableCell>
+                                <TableCell className="truncate max-w-4xl">{game.description}</TableCell>
+                                <TableCell>
+                                    <div className="space-x-2">
+                                        <Button
+                                            onClick={() => setEditingGameIndex(games.indexOf(game))}
+                                            variant={'secondary'}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleDelete(game.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
 
             {editingGameIndex !== null && (
