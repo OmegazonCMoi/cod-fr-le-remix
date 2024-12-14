@@ -18,7 +18,7 @@ const Games = () => {
     useEffect(() => {
         const fetchGames = async () => {
             try {
-                const response = await fetch('http://express-cod-fr.vercel.app/api/games');
+                const response = await fetch('https://express-cod-fr.vercel.app/api/games');
                 if (!response.ok) throw new Error('Failed to fetch games');
                 const data = await response.json();
                 setGames(data);
