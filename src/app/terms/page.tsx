@@ -42,7 +42,7 @@ export default function PolicyAndTerms() {
                             <section className="mb-8">
                                 <h2 className="text-2xl font-semibold mb-4">3. Privacy Policy</h2>
                                 <p className="text-gray-700">
-                                    Your privacy is important to us. That's why we don't collect any personal information from our users.
+                                    Your privacy is important to us. That&apos;s why we don&apos;t collect any personal information from our users.
                                 </p>
                             </section>
 
