@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/auth-context';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -14,11 +14,11 @@ const AccountPage: React.FC = () => {
     const { user, setUser, token, logout } = useAuth();
     const router = useRouter();
 
-    const [formData, setFormData] = useState({
+    const formData = {
         name: user?.name || '',
         email: user?.email || '',
         password: '',
-    });
+    };
     const [formDataReview, setFormDataReview] = useState({
         user_name: '',
         note: 1,
@@ -28,22 +28,18 @@ const AccountPage: React.FC = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState<'success' | 'error' | ''>(''); // For styling messages
     const [loading, setLoading] = useState(false);
-    const [reviewsLoaded, setReviewsLoaded] = useState(false);
     const sectionRef = useRef(null);
 
-    const fetchReviews = async (p0: (prev: any) => any[]) => {
+    const fetchReviews = useCallback(async () => {
         try {
             const response = await fetch(`https://express-cod-fr.vercel.app/api/reviews/user/${user?.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await response.json();
 
-            if (response.ok) {
-                if (data.length > 0) {
-                    const { user_name, note, message } = data[0]; // Use first review
-                    setFormDataReview({ user_name, note, message });
-                }
-                setReviewsLoaded(true);
+            if (response.ok && data.length > 0) {
+                const { user_name, note, message } = data[0]; // Use first review
+                setFormDataReview({ user_name, note, message });
             } else {
                 setMessage(data.message || 'Failed to load reviews');
                 setMessageType('error');
@@ -52,7 +48,7 @@ const AccountPage: React.FC = () => {
             setMessage('An error occurred while fetching reviews');
             setMessageType('error');
         }
-    };
+    }, [user, token]);
 
     useEffect(() => {
         if (sectionRef.current) {
@@ -73,8 +69,8 @@ const AccountPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (user) fetchReviews((prev) => prev);
-    }, [user]);
+        if (user) fetchReviews();
+    }, [user, fetchReviews]);
 
     const handleUpdate = async () => {
         setLoading(true);
@@ -92,7 +88,7 @@ const AccountPage: React.FC = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(formData),
             });
@@ -148,11 +144,11 @@ const AccountPage: React.FC = () => {
                 throw new Error(errorData.message || 'Failed to submit review');
             }
 
-            await fetchReviews((prev) => prev);
+            await fetchReviews();
 
             setMessage('Review submitted successfully!');
             setMessageType('success');
-        } catch (error) {
+        } catch {
             setMessage('Failed to submit review');
             setMessageType('error');
         }
