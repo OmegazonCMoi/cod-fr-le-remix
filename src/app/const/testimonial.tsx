@@ -1,21 +1,21 @@
 export const testimonials = [
     {
         id: 'testimonial-1',
-        text: 'Je vous encourage vivement à explorer cette option, car elle mérite toute votre attention. Prenez le temps de la découvrir en détail, vous pourriez être agréablement surpris par ses atouts. Je ne peux que vous la recommander chaleureusement !',
+        text: 'I strongly encourage you to explore this option, as it truly deserves your attention. Take the time to discover it in detail—you might be pleasantly surprised by its advantages. I can only recommend it to you wholeheartedly!',
         name: 'CaptainGreg7',
         role: 'Semi VIP Member',
         avatar: '/images/captaingreg-avatar.png',
     },
     {
         id: 'testimonial-2',
-        text: 'Les instructions sont claires et simples à suivre, le personnel est compétent et bien formé, et vous trouverez toujours des personnes prêtes à vous apporter leur aide avec bienveillance.',
+        text: 'The instructions are clear and easy to follow, the staff is competent and well-trained, and you will always find people ready to assist you with kindness.',
         name: 'zoxxq',
         role: 'Semi VIP Member',
         avatar: '/images/zoxxq-avatar.png',
     },
     {
         id: 'testimonial-3',
-        text: 'Honnêtement, c\'est le meilleur serveur que j\'ai vu, et ce n\'est pas seulement parce que j\'en suis le fondateur que je dis ça, on mérite des applaudissements :)',
+        text: 'Honestly, this is the best server I\'ve ever seen, and I\'m not just saying that because I\'m the founder—we truly deserve a round of applause! :)',
         name: 'Omega',
         role: 'Founder',
         avatar: '/images/omega-avatar.png',
