@@ -22,6 +22,8 @@ export default function CreateDiscussionDialog() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false); // État pour contrôler l'ouverture du Dialog
 
+    console.log(id_user);
+
     const handleCreateDiscussion = async () => {
         if (!title.trim() || !content.trim()) {
             setError('Veuillez remplir tous les champs.');

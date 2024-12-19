@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { animate, spring } from 'motion';
+import { animate } from 'motion';
 import Navbar from '@/components/blocks/navbar';
 import Image from 'next/image';
 import Footer from '@/components/blocks/footer';
@@ -15,6 +15,8 @@ const Videos = () => {
     const [selectedLinks, setSelectedLinks] = useState<{ [key: string]: string }>({});
     const [showOptions, setShowOptions] = useState<{ [key: string]: boolean }>({});
     const videoRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    console.log(selectedLinks);
 
     useEffect(() => {
         const fetchVideos = async () => {

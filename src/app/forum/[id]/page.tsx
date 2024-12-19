@@ -95,7 +95,7 @@ export default function ForumPost({ params }: ForumPostProps) {
 
                     // Récupérez les noms des auteurs pour les commentaires
                     await fetchCommentAuthors(commentsData);
-                } catch (err) {
+                } catch {
                     setError('Impossible de charger la discussion.');
                 }
             }
@@ -188,25 +188,25 @@ export default function ForumPost({ params }: ForumPostProps) {
                         <div className="prose mt-4">
                             <ReactMarkdown
                                 components={{
-                                    p: ({ node, ...props }) => (
+                                    p: ({ ...props }) => (
                                         <p className="text-neutral-700 leading-relaxed mb-6" {...props} />
                                     ),
-                                    strong: ({ node, ...props }) => (
+                                    strong: ({ ...props }) => (
                                         <strong className="font-extrabold" {...props} />
                                     ),
-                                    em: ({ node, ...props }) => (
+                                    em: ({ ...props }) => (
                                         <em className="italic text-neutral-700" {...props} />
                                     ),
-                                    h1: ({ node, ...props }) => (
+                                    h1: ({ ...props }) => (
                                         <h1 className="text-3xl font-bold mt-6 mb-2 text-neutral-900" {...props} />
                                     ),
-                                    h2: ({ node, ...props }) => (
+                                    h2: ({ ...props }) => (
                                         <h2 className="text-2xl font-bold mt-5 mb-2 text-neutral-900" {...props} />
                                     ),
-                                    h3: ({ node, ...props }) => (
+                                    h3: ({ ...props }) => (
                                         <h3 className="text-xl font-bold mt-4 mb-2 text-neutral-900" {...props} />
                                     ),
-                                    a: ({ node, ...props }) => (
+                                    a: ({ ...props }) => (
                                         <a
                                             className="text-blue-600 hover:underline"
                                             target="_blank"
@@ -214,22 +214,22 @@ export default function ForumPost({ params }: ForumPostProps) {
                                             {...props}
                                         />
                                     ),
-                                    ul: ({ node, ...props }) => (
+                                    ul: ({ ...props }) => (
                                         <ul className="list-disc ml-6 mb-4" {...props} />
                                     ),
-                                    ol: ({ node, ...props }) => (
+                                    ol: ({ ...props }) => (
                                         <ol className="list-decimal ml-6 mb-4" {...props} />
                                     ),
-                                    li: ({ node, ...props }) => (
+                                    li: ({ ...props }) => (
                                         <li className="mb-2" {...props} />
                                     ),
-                                    blockquote: ({ node, ...props }) => (
+                                    blockquote: ({ ...props }) => (
                                         <blockquote className="bg-neutral-100 p-4 rounded-lg mt-4 mb-4" {...props} />
                                     ),
-                                    code: ({ node, ...props }) => (
+                                    code: ({ ...props }) => (
                                         <code className="bg-gray-100 rounded px-1 font-mono text-sm" {...props} />
                                     ),
-                                    pre: ({ node, ...props }) => (
+                                    pre: ({ ...props }) => (
                                         <pre className="bg-neutral-900 text-white p-4 rounded mt-4" {...props} />
                                     ),
                                 }}
@@ -247,22 +247,22 @@ export default function ForumPost({ params }: ForumPostProps) {
                                             p: ({ node, ...props }) => (
                                                 <p className="text-neutral-500 leading-relaxed" {...props} />
                                             ),
-                                            strong: ({ node, ...props }) => (
+                                            strong: ({ ...props }) => (
                                                 <strong className="font-extrabold" {...props} />
                                             ),
-                                            em: ({ node, ...props }) => (
+                                            em: ({ ...props }) => (
                                                 <em className="italic text-neutral-700" {...props} />
                                             ),
-                                            h1: ({ node, ...props }) => (
+                                            h1: ({ ...props }) => (
                                                 <h1 className="text-3xl font-bold mt-6 mb-2 text-neutral-900" {...props} />
                                             ),
-                                            h2: ({ node, ...props }) => (
+                                            h2: ({ ...props }) => (
                                                 <h2 className="text-2xl font-bold mt-5 mb-2 text-neutral-900" {...props} />
                                             ),
-                                            h3: ({ node, ...props }) => (
+                                            h3: ({ ...props }) => (
                                                 <h3 className="text-xl font-bold mt-4 mb-2 text-neutral-900" {...props} />
                                             ),
-                                            a: ({ node, ...props }) => (
+                                            a: ({ ...props }) => (
                                                 <a
                                                     className="text-blue-600 hover:underline"
                                                     target="_blank"
@@ -270,22 +270,22 @@ export default function ForumPost({ params }: ForumPostProps) {
                                                     {...props}
                                                 />
                                             ),
-                                            ul: ({ node, ...props }) => (
+                                            ul: ({ ...props }) => (
                                                 <ul className="list-disc ml-6 mb-4" {...props} />
                                             ),
-                                            ol: ({ node, ...props }) => (
+                                            ol: ({ ...props }) => (
                                                 <ol className="list-decimal ml-6 mb-4" {...props} />
                                             ),
-                                            li: ({ node, ...props }) => (
+                                            li: ({ ...props }) => (
                                                 <li className="mb-2" {...props} />
                                             ),
-                                            blockquote: ({ node, ...props }) => (
+                                            blockquote: ({ ...props }) => (
                                                 <blockquote className="bg-neutral-100 p-4 rounded-lg mt-4 mb-4" {...props} />
                                             ),
-                                            code: ({ node, ...props }) => (
+                                            code: ({ ...props }) => (
                                                 <code className="bg-gray-100 rounded px-1 font-mono text-sm" {...props} />
                                             ),
-                                            pre: ({ node, ...props }) => (
+                                            pre: ({ ...props }) => (
                                                 <pre className="bg-neutral-900 text-white p-4 rounded mt-4" {...props} />
                                             ),
                                         }}>
