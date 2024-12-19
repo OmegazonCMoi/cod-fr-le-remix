@@ -244,7 +244,7 @@ export default function ForumPost({ params }: ForumPostProps) {
                                     <p className="font-bold">{comment.authorName || 'Anonymous'}</p>
                                     <ReactMarkdown
                                         components={{
-                                            p: ({ node, ...props }) => (
+                                            p: ({ ...props }) => (
                                                 <p className="text-neutral-500 leading-relaxed" {...props} />
                                             ),
                                             strong: ({ ...props }) => (
