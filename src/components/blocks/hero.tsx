@@ -8,7 +8,7 @@ import Link from 'next/link';
 const Hero = () => {
 
     return (
-        <section className="relative overflow-hidden w-full justify-center mx-auto flex flex-col pt-20 sm:pt-24 md:pt-32 pb-16 animate-fadeIn">
+        <section className="relative overflow-hidden w-full justify-center mx-auto flex flex-col pt-20 sm:pt-24 md:pt-40 pb-16 animate-fadeIn">
             {/* Background SVG */}
             <div className="absolute inset-0 overflow-hidden">
                 <svg

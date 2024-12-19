@@ -38,40 +38,62 @@ const AccountPage: React.FC = () => {
     };
 
     const fetchReviews = useCallback(async () => {
+        // Si l'utilisateur n'est pas défini, arrêter immédiatement
+        if (!user?.id) {
+            console.warn('No user ID provided. Skipping fetchReviews.');
+            return;
+        }
+
         try {
-            const response = await fetch(`https://express-cod-fr.vercel.app/api/reviews/user/${user?.id}`, {
+            console.log(`Fetching reviews for user ID: ${user.id}`);
+
+            // Effectuer la requête
+            const response = await fetch(`https://express-cod-fr.vercel.app/api/reviews/user/${user.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            const data = await response.json();
 
-            if (response.ok && data.length > 0) {
-                const { user_name, note, message } = data[0]; // Use first review
+            // Vérifiez si la requête a réussi
+            if (!response.ok) {
+                console.error(`Failed to fetch reviews: ${response.status} - ${response.statusText}`);
+                return;
+            }
+
+            // Parsez les données JSON de la réponse
+            const data = await response.json();
+            console.log('Fetched reviews:', data);
+
+            // Si des avis sont trouvés, mettez à jour l'état avec le premier
+            if (Array.isArray(data) && data.length > 0) {
+                const { user_name, note, message } = data[0]; // On prend le premier avis
+                console.log('Review found:', data[0]);
                 setFormDataReview({ user_name, note, message });
             } else {
-                setMessage(data.message || 'Failed to load reviews');
-                setMessageType('error');
+                // Aucun avis trouvé : ne rien faire
+                console.info('No reviews found for this user. Nothing to update.');
             }
-        } catch {
-            setMessage('An error occurred while fetching reviews');
-            setMessageType('error');
+        } catch (error) {
+            // Capturer et logguer les erreurs
+            console.error('An error occurred while fetching reviews:', error);
         }
     }, [user, token]);
 
     useEffect(() => {
         if (sectionRef.current) {
-            const sequence = [
-                { target: '.profile-header', delay: 0 },
-                { target: '.input-group', delay: 0.2 },
-                { target: '.button-group', delay: 0.4 },
-                { target: '.review-header', delay: 0.6 },
-                { target: '.input-review', delay: 0.8 },
-                { target: '.modify-button', delay: 1 },
-                { target: '.logout-button', delay: 1.2 },
-            ];
+            setTimeout(() => {
+                const sequence = [
+                    { target: '.profile-header', delay: 0 },
+                    { target: '.input-group', delay: 0.2 },
+                    { target: '.button-group', delay: 0.4 },
+                    { target: '.review-header', delay: 0.6 },
+                    { target: '.input-review', delay: 0.8 },
+                    { target: '.modify-button', delay: 1 },
+                    { target: '.logout-button', delay: 1.2 },
+                ];
 
-            sequence.forEach(({ target, delay }) =>
-                animate(target, { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay })
-            );
+                sequence.forEach(({ target, delay }) =>
+                    animate(target, { opacity: [0, 1], y: [50, 0] }, { duration: 0.6, delay })
+                );
+            }, 100); // Délai de 100 ms
         }
     }, []);
 
@@ -223,7 +245,7 @@ const AccountPage: React.FC = () => {
                 <p>Loading user details...</p>
             )}
 
-            <h2 className="text-xl font-semibold mt-10 review-header">Modify your Review</h2>
+            <h2 className="text-2xl font-semibold mt-10 review-header">Modify your Review</h2>
             <form onSubmit={handleSubmit} className="space-y-4 mt-4 input-review">
                 <div className="space-y-1">
                     <Label htmlFor="user_name" className="text-sm font-medium">Your Name</Label>

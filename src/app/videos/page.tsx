@@ -1,20 +1,20 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { animate } from 'motion';
+import { animate, spring } from 'motion';
 import Navbar from '@/components/blocks/navbar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Image from 'next/image';
-import Link from 'next/link';
 import Footer from '@/components/blocks/footer';
+import { Play } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import Link from 'next/link';
 
 const Videos = () => {
     const [videos, setVideos] = useState<any[]>([]);
     const [error, setError] = useState<string>('');
     const [selectedLinks, setSelectedLinks] = useState<{ [key: string]: string }>({});
-    const videoRefs = useRef<(HTMLDivElement | null)[]>([]); // Reference to video cards
+    const [showOptions, setShowOptions] = useState<{ [key: string]: boolean }>({});
+    const videoRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
         const fetchVideos = async () => {
@@ -31,20 +31,6 @@ const Videos = () => {
         fetchVideos();
     }, []);
 
-    useEffect(() => {
-        // Animate video cards after they are rendered
-        if (videoRefs.current.length) {
-            videoRefs.current.forEach((video, idx) => {
-                if (video) {
-                    animate(video, { opacity: [0, 1], y: [50, 0] }, {
-                        duration: 0.6,
-                        delay: idx * 0.2 // Delay to stagger animations
-                    });
-                }
-            });
-        }
-    }, [videos]); // Trigger animation after videos are loaded
-
     const handleSelectChange = (videoId: string, value: string) => {
         const updatedLink =
             value === "1" ? videos.find(v => v.id === videoId)?.link :
@@ -54,8 +40,20 @@ const Videos = () => {
 
         setSelectedLinks((prev) => ({
             ...prev,
-            [videoId]: updatedLink, // Set the selected link for the video
+            [videoId]: updatedLink,
         }));
+
+        setShowOptions((prev) => ({
+            ...prev,
+            [videoId]: false,
+        }));
+    };
+
+    const toggleOptions = (videoId: string) => {
+        setShowOptions((prev) => {
+            const isCurrentlyVisible = prev[videoId];
+            return { ...prev, [videoId]: !isCurrentlyVisible };
+        });
     };
 
     return (
@@ -63,7 +61,7 @@ const Videos = () => {
             <div id="videos" className="min-h-screen flex flex-col">
                 <Navbar />
                 <div className="flex-grow grid place-items-center">
-                    <h1 className="my-4 text-pretty text-3xl font-bold sm:text-4xl lg:text-6xl mt-48">
+                    <h1 className="my-4 text-pretty text-3xl font-bold sm:text-4xl lg:text-6xl mt-48 mb-20">
                         All videos we&apos;ve posted
                     </h1>
 
@@ -73,57 +71,72 @@ const Videos = () => {
                         {videos.map((video, idx) => (
                             <Card
                                 key={video.id}
-                                className="w-[350px] h-full"
-                                ref={(el) => { videoRefs.current[idx] = el; }} // Set reference to the card
+                                ref={(el) => { videoRefs.current[idx] = el; }}
+                                className="w-[340px] relative"
                             >
-                                <CardHeader>
-                                    <CardTitle>{video.title}</CardTitle>
-                                    <CardDescription>{video.description}</CardDescription>
+                                <CardHeader className="pb-1">
+                                    <Play className="size-4" strokeWidth={1} />
                                 </CardHeader>
-                                <CardContent>
-                                    <div className="grid w-full items-center gap-4">
-                                        <div className="flex flex-col space-y-1.5">
-                                            <Image
-                                                src={video.img || '/images/placeholder.png'}
-                                                alt={video.title || 'Video Thumbnail'}
-                                                width={300}
-                                                height={200}
-                                                className="rounded-lg"
-                                            />
+                                <CardContent className="text-left">
+                                    <h2
+                                        className="mb-1 text-lg font-semibold cursor-pointer hover:text-blue-500 transition-colors"
+                                        onClick={() => toggleOptions(video.id)}
+                                    >
+                                        {video.title}
+                                    </h2>
+                                    {showOptions[video.id] && (
+                                        <div
+                                            className="absolute top-12 left-0 w-full bg-white border border-gray-300 shadow-lg rounded-md z-10 p-2"
+                                            style={{ opacity: 0 }}
+                                            ref={(el) => {
+                                                if (el) {
+                                                    animate(el, { opacity: [0, 1], scale: [0.9, 1] }, { duration: 0.3 });
+                                                }
+                                            }}
+                                        >
+                                            <ul>
+                                                <Link href={video.link}>
+                                                    <li
+                                                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                                                        onClick={() => handleSelectChange(video.id, "1")}
+                                                    >
+                                                        Watch Video
+                                                    </li>
+                                                </Link>
+                                                <Link href={video.steam}>
+                                                    <li
+                                                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                                                        onClick={() => handleSelectChange(video.id, "2")}
+                                                    >
+                                                        Steam Link
+                                                    </li>
+                                                </Link>
+                                                <Link href={video.cheats}>
+                                                    <li
+                                                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                                                        onClick={() => handleSelectChange(video.id, "3")}
+                                                    >
+                                                        Get Cheats
+                                                    </li>
+                                                </Link>
+                                            </ul>
                                         </div>
-                                    </div>
+                                    )}
+                                    <p className="leading-snug text-muted-foreground">
+                                        {video.description}
+                                    </p>
                                 </CardContent>
-                                <CardFooter className="flex gap-4 justify-end">
-                                    <Select onValueChange={(value) => handleSelectChange(video.id, value)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select an action" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="1">Watch Video</SelectItem>
-                                            <SelectItem value="2">Steam Link</SelectItem>
-                                            <SelectItem value="3">Get Cheats</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <Link href={selectedLinks[video.id] || '#'} passHref>
-                                        <Button>
-                                            Go to Link
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24"
-                                                height="24"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="lucide lucide-move-right"
-                                            >
-                                                <path d="M18 8L22 12L18 16" />
-                                                <path d="M2 12H22" />
-                                            </svg>
-                                        </Button>
-                                    </Link>
+                                <CardFooter className="justify-end pb-0 pr-0">
+                                    <Image
+                                        className="h-40 w-full rounded-tl-md rounded-br-md object-cover object-center"
+                                        src={video.img || 'https://www.shadcnblocks.com/images/block/placeholder.svg'}
+                                        alt={video.title || 'Video Thumbnail'}
+                                        onError={(e) => {
+                                            e.currentTarget.src = 'https://www.shadcnblocks.com/images/block/placeholder.svg';
+                                        }}
+                                        width={300}
+                                        height={200}
+                                    />
                                 </CardFooter>
                             </Card>
                         ))}

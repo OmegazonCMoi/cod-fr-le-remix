@@ -67,11 +67,9 @@ const Reviews = () => {
         const infoText = document.getElementById('review-form-info');
 
         if (!user && reviewForm && infoText) {
-            console.log('User not logged in, applying blur');
             reviewForm.classList.add('blur-xl', 'border');
             infoText.classList.remove('hidden');
         } else if (infoText) {
-            console.log('User logged in, removing blur');
             infoText.classList.add('hidden');
             if (reviewForm) {
                 reviewForm.classList.remove('blur-xl', 'border'); // Ajoutez cette ligne si nécessaire
@@ -159,7 +157,7 @@ const Reviews = () => {
                                         placeholder="Enter your name"
                                         value={formData.user_name || ''}
                                         onChange={(e) => setFormData({ ...formData, user_name: e.target.value })}
-                                        disabled={!isUserLoggedIn}
+                                        disabled={isUserLoggedIn}
                                     />
                                 </div>
 
@@ -170,7 +168,7 @@ const Reviews = () => {
                                     <Select
                                         value={formData.note || ''}
                                         onValueChange={(value) => setFormData({ ...formData, note: value })}
-                                        disabled={!isUserLoggedIn}
+                                        disabled={isUserLoggedIn}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a rating (1 to 5)" />
@@ -194,11 +192,11 @@ const Reviews = () => {
                                         placeholder="Share your experience..."
                                         value={formData.message || ''}
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                        disabled={!isUserLoggedIn}
+                                        disabled={isUserLoggedIn}
                                     />
                                 </div>
 
-                                <Button type="submit" className="w-full" disabled={!isUserLoggedIn}>
+                                <Button type="submit" className="w-full" disabled={isUserLoggedIn}>
                                     Submit Review
                                 </Button>
                             </form>

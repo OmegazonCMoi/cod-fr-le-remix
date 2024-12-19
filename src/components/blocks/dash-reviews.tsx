@@ -63,7 +63,7 @@ const DashReviews: React.FC = () => {
             {error && <p className="text-red-500 mt-4">{error}</p>}
 
             {/* Display Reviews */}
-            <div className="overflow-x-auto mt-8 rounded-lg bg-white">
+            <div className="overflow-x-auto mt-8 rounded-lg">
                 <Table>
                     <TableHeader>
                         <TableRow>

@@ -170,6 +170,18 @@ const Navbar = () => {
                                         variant: 'ghost',
                                     })
                                 )}
+                                href="forum"
+                            >
+                                Forum
+                            </Link>
+                            <Link
+                                className={cn(
+                                    'text-muted-foreground',
+                                    navigationMenuTriggerStyle,
+                                    buttonVariants({
+                                        variant: 'ghost',
+                                    })
+                                )}
                                 href="reviews"
                             >
                                 Reviews

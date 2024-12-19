@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from '../ui/button';
 
 const DashFiles: React.FC = () => {
@@ -80,42 +81,46 @@ const DashFiles: React.FC = () => {
                 </Button>
             </div>
 
-            <div className="overflow-x-auto mt-8 bg-white rounded-lg">
-                <table className="min-w-full border-collapse border border-gray-300 rounded-lg">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Name</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Extension</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Date Added</th>
-                            <th className="py-3 px-6 text-left font-medium text-gray-700">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div className="overflow-x-auto mt-8">
+                <Table className="min-w-full rounded-lg">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="py-3 px-6 text-left font-medium text-gray-700">Name</TableHead>
+                            <TableHead className="py-3 px-6 text-left font-medium text-gray-700">Extension</TableHead>
+                            <TableHead className="py-3 px-6 text-left font-medium text-gray-700">Date Added</TableHead>
+                            <TableHead className="py-3 px-6 text-left font-medium text-gray-700">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {files.length === 0 ? (
-                            <tr>
-                                <td colSpan={4} className="py-4 px-6 text-center text-gray-500">
+                            <TableRow>
+                                <TableCell colSpan={4} className="py-4 px-6 text-center text-gray-500">
                                     No files uploaded
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             files.map((file) => (
-                                <tr key={file.name} className="border-t border-gray-200 bg-white hover:bg-gray-50">
-                                    <td className="py-4 px-6 text-sm text-gray-800">{file.name}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-800">{file.extension || 'N/A'}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-800">{file.dateAdded ? formatDate(file.dateAdded) : 'N/A'}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-800 space-x-2">
+                                <TableRow key={file.name} className="border-t border-gray-200 bg-white hover:bg-gray-50">
+                                    <TableCell className="py-4 px-6 text-sm text-gray-800">{file.name}</TableCell>
+                                    <TableCell className="py-4 px-6 text-sm text-gray-800">
+                                        {file.extension || "N/A"}
+                                    </TableCell>
+                                    <TableCell className="py-4 px-6 text-sm text-gray-800">
+                                        {file.dateAdded ? formatDate(file.dateAdded) : "N/A"}
+                                    </TableCell>
+                                    <TableCell className="py-4 px-6 text-sm text-gray-800 space-x-2">
                                         <Button
                                             onClick={() => handleDeleteFile(file.name)}
                                             className="bg-red-500 text-white hover:bg-red-700"
                                         >
                                             Delete
                                         </Button>
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ))
                         )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );
