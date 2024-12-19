@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   // Open Graph properties
   openGraph: {
     title: "Hack on COD",
-    description: "Hack on COD official website",
+    description: "Hack on COD website where you can find cheats, cracks and help for Call of Duty and more !",
     url: "https://hackoncod.com", // Remplacez par votre URL officielle
     type: "website",
     images: [
